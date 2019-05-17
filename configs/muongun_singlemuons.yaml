@@ -1,3 +1,5 @@
+chain_name: muongun_floodlight_py3v4
+
 # Number of the dataset
 dataset_number: 1904
 # Events generated for each file
