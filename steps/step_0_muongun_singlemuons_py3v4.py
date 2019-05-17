@@ -1,4 +1,4 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4/icetray-start
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
 #METAPROJECT /data/user/jsoedingrekso/ic_software/combo/trunk/build
 import click
 import yaml
