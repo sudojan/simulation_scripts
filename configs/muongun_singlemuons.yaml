@@ -33,6 +33,10 @@ keep_crashed_files: False
 # PATH to the GCD File
 gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
 
+# ------------------------------------------- #
+##### for the muon generation/propagation #####
+# ------------------------------------------- #
+
 # Name of the generator; only used for naming of the output folder
 generator: muongun
 # Starting Energy GeV
@@ -46,13 +50,66 @@ zenith_min: 0.
 # End zenith
 zenith_max: 180.
 
+# choose one of the following MuonGenerators
+# MuonGunSinglemuons, MuonGunGeneral, MuonResimulation
+MuonGenerator: MuonGunSinglemuons
+
+# MuonGunSinglemuons and MuonGunGeneral option
+# Energy offset `b` of power-law approximation (E + b)^{-gamma}
+muongun_e_break: !!float 1e6
+
+# muongun general specific options
+muongun_generator: static
+muongun_model: GaisserH4a_atmod12_SIBYLL
+muongun_min_multiplicity: 1
+muongun_max_multiplicity: 1000
+# muongun floodlight specific options
+muongun_floodlight_min_cos: -1.0
+muongun_floodlight_max_cos: 1.0
+
+# resimulation specific options
+# Starting azimuth
+azimuth_min: 0.
+# End azimuth
+azimuth_max: 360.
+# anchor time range in ns [min,max]
+anchor_time_range: [9000,12000]
+# anchor point range in m [min,max]
+anchor_x_range: [-400,400]
+anchor_y_range: [-400,400]
+anchor_z_range: [-400,400]
+# distance [m] to go back along track
+# from the anchor point in order to
+# create the vertex of the muon
+length_to_go_back: 2000
+# Instead create the vertex on the
+# convex hull?
+# If use_convex_hull is True,
+# length_to_go_back is ignored
+use_convex_hull: False
+# Distance to move vertex further past 
+# the convex hull
+extend_past_hull: 0.
+
+# MuonPropagation specific options
+muon_propagation_config : {
+    config_file: /home/jsoedingrekso/PROPOSAL/resources/config_icesim.json
+}
+
+# use smarter DOM oversize options?
+distance_splits:
+threshold_doms:
+oversize_factors:
+
+
+# ---------------------------------- #
+##### for the photon propagation #####
+# ---------------------------------- #
+
 # Used icemodel ['SpiceLea']
 icemodel: SpiceLea
 # For default location: leave empty
 icemodel_location:
-
-# MuonPropagation specific options
-muon_propagation_config : {}
 
 # CLSIM specific options
 # Ratio of the dom not shadowed by calbes other anything else
@@ -68,12 +125,6 @@ clsim_keep_mcpe: False
 # Whether CLsim should run in hybrid mode
 clsim_hybrid_mode: False
 
-
-
-
-# muongun specific options
-# Energy offset `b` of power-law approximation (E + b)^{-gamma}
-muongun_e_break: !!float 1e3
 
 # Detector Simulation
 # keep MCPEs in frame
