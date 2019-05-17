@@ -1,5 +1,5 @@
 #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
-#METAPROJECT /data/user/jsoedingrekso/ic_software/combo/trunk/build
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import click
 import yaml
 
@@ -172,7 +172,7 @@ class ParticleMultiplier(icetray.I3ConditionalModule):
 
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
@@ -229,6 +229,14 @@ def main(cfg, run_number, scratch):
     if 'extend_past_hull' not in cfg:
         cfg['extend_past_hull'] = 0.0
 
+    random_services, _ = create_random_services(
+        dataset_number=cfg['dataset_number'],
+        run_number=cfg['run_number'],
+        seed=cfg['seed'],
+        n_services=2)
+
+    random_service, random_service_prop = random_services
+
     # create muon
     muon = create_muon(
             azimuth_range=[cfg['azimuth_min'], cfg['azimuth_max']],
@@ -247,13 +255,6 @@ def main(cfg, run_number, scratch):
 
     tray = I3Tray()
 
-    random_services, _ = create_random_services(
-        dataset_number=cfg['dataset_number'],
-        run_number=cfg['run_number'],
-        seed=cfg['seed'],
-        n_services=2)
-
-    random_service, random_service_prop = random_services
     tray.context['I3RandomService'] = random_service
 
     tray.AddModule("I3InfiniteSource",
@@ -317,7 +318,7 @@ def main(cfg, run_number, scratch):
 
         tray.Add("Rename", keys=["I3MCTree", "I3MCTree_preMuonProp"])
 
-    elif cfg['MuonGenerator'] == 'MuonResimulation'::
+    elif cfg['MuonGenerator'] == 'MuonResimulation':
         tray.AddModule(ParticleMultiplier,
                        'make_particles',
                        num_events=cfg['n_events_per_run'],
