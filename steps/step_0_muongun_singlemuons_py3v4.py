@@ -8,7 +8,7 @@ from scipy.spatial import ConvexHull
 
 from icecube.simprod import segments
 
-from I3Tray import I3Tray
+from I3Tray import I3Tray, I3Units
 from icecube import icetray, dataclasses
 from icecube import sim_services, MuonGun
 import os
