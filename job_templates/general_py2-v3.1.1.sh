@@ -8,20 +8,20 @@
 #PBS -o {processing_folder}/logs/{step_name}_run_{run_number}_${PBS_JOBID}.out
 #PBS -e {processing_folder}/logs/{step_name}_run_{run_number}_${PBS_JOBID}.err
 #PBS -q long
-#PBS -S /cvmfs/icecube.opensciencegrid.org/py2-v3.0.1/icetray-start
+#PBS -S /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
 FINAL_OUT={final_out}
 KEEP_CRASHED_FILES={keep_crashed_files}
 
 
 
-echo 'Loading py2-v3.0.1'
-eval `/cvmfs/icecube.opensciencegrid.org/py2-v3.0.1/setup.sh`
-export PYTHONUSERBASE=/data/user/jsoedingrekso/software/python2libs/
+echo 'Loading py2-v3.1.1'
+eval `/cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/setup.sh`
+export PYTHONUSERBASE=/home/jsoedingrekso/software/python2libs/
 echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
 
 export PATH=$PYTHONUSERBASE/bin:$PATH
 export PYTHONPATH=$PYTHONUSERBASE/lib/python2.7/site-packages:$PYTHONPATH
-
+echo 'Using PYTHONPATH: '${PYTHONPATH}
 
 echo $FINAL_OUT
 if [ -z ${PBS_JOBID} ] && [ -z ${_CONDOR_SCRATCH_DIR} ]

@@ -95,7 +95,7 @@ extend_past_hull: 0.
 
 # MuonPropagation specific options
 muon_propagation_config : {
-    # config_file: /data/user/jsoedingrekso/resources/config_icesim.json
+    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
 }
 
 # use smarter DOM oversize options?
