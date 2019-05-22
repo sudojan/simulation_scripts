@@ -19,7 +19,7 @@ muongun_floodlight_py2v3:
   job_template: job_templates/general_py2-v3.1.1.sh
   steps:
     0: step_0_muongun_singlemuons_py3v4
-    1: step_1_general_photon_propagation
+    1: step_1_general_photon_propagation_py2-v3.1.1
     2: step_2_pass2_detector_simulation
     3: step_3_pass2_L1
     4: step_4_pass2_L2
