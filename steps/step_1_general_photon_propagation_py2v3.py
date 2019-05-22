@@ -19,7 +19,6 @@ from utils import create_random_services, get_run_folder
 from dom_distance_cut import generate_stream_object
 
 
-MAX_PARALLEL_EVENTS = 50
 SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
 
 
@@ -75,7 +74,6 @@ def process_single_stream(cfg, infile, outfile):
         segments.PropagatePhotons,
         "PropagatePhotons",
         RandomService=random_service,
-        MaxParallelEvents=MAX_PARALLEL_EVENTS,
         KeepIndividualMaps=cfg['clsim_keep_mcpe'],
         IceModel=cfg['icemodel'],
         IceModelLocation=cfg['icemodel_location'],
