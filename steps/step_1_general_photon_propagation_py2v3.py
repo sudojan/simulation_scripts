@@ -76,23 +76,24 @@ def process_single_stream(cfg, infile, outfile):
     else:
         MCTreeName="I3MCTree_sliced"
         MMCTrackListName=None
-
-    # tray.AddSegment(
-    #     segments.PropagatePhotons,
-    #     "PropagatePhotons",
-    #     GCDFile=cfg['gcd'],
-    #     RandomService=random_service,
-    #     KeepIndividualMaps=cfg['clsim_keep_mcpe'],
-    #     IceModel=cfg['icemodel'],
-    #     IceModelLocation=cfg['icemodel_location'],
-    #     UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
-    #     IgnoreMuons=ignore_muon_light,
-    #     HybridMode=hybrid_mode,
-    #     UseGPUs=use_gpus,
-    #     UseAllCPUCores=use_cpus,
-    #     DOMOversizeFactor=cfg['clsim_dom_oversize'],
-    #     CascadeService=cascade_tables,
-    #     **additional_clsim_params)
+    #use_gpus=False
+    #use_cpus=True
+    #tray.AddSegment(
+    #    segments.PropagatePhotons,
+    #    "PropagatePhotons",
+    #    GCDFile=cfg['gcd'],
+    #    RandomService=random_service,
+    #    KeepIndividualMaps=cfg['clsim_keep_mcpe'],
+    #    IceModel=cfg['icemodel'],
+    #    IceModelLocation=cfg['icemodel_location'],
+    #    UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
+    #    IgnoreMuons=ignore_muon_light,
+    #    HybridMode=hybrid_mode,
+    #    UseGPUs=use_gpus,
+    #    UseAllCPUCores=use_cpus,
+    #    DOMOversizeFactor=cfg['clsim_dom_oversize'],
+    #    CascadeService=cascade_tables,
+    #    **additional_clsim_params)
 
     tray.AddSegment(clsim.I3CLSimMakeHits, "makeCLSimHits",
         GCDFile = cfg['gcd'],
@@ -102,9 +103,9 @@ def process_single_stream(cfg, infile, outfile):
         RandomService = random_service,
         MCPESeriesName = "MCPESeriesMap",
         UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
-        UseGPUs=use_gpus,
-        UseCPUs=use_cpus,
-        IceModelLocation=expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
+        UseGPUs = use_gpus,
+        UseCPUs = use_cpus,
+        IceModelLocation = os.path.expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
         )
 
 
