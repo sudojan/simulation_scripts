@@ -73,6 +73,7 @@ def process_single_stream(cfg, infile, outfile):
     tray.AddSegment(
         segments.PropagatePhotons,
         "PropagatePhotons",
+        GCDFile=cfg['gcd'],
         RandomService=random_service,
         KeepIndividualMaps=cfg['clsim_keep_mcpe'],
         IceModel=cfg['icemodel'],
