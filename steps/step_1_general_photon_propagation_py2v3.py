@@ -14,7 +14,7 @@ import numpy as np
 from icecube.simprod import segments
 
 from I3Tray import I3Tray
-from icecube import icetray, dataclasses, dataio, phys_services
+from icecube import icetray, dataclasses, dataio, phys_services, clsim
 from utils import create_random_services, get_run_folder
 from dom_distance_cut import generate_stream_object
 
@@ -70,22 +70,43 @@ def process_single_stream(cfg, infile, outfile):
     else:
         additional_clsim_params = {}
 
-    tray.AddSegment(
-        segments.PropagatePhotons,
-        "PropagatePhotons",
-        GCDFile=cfg['gcd'],
-        RandomService=random_service,
-        KeepIndividualMaps=cfg['clsim_keep_mcpe'],
-        IceModel=cfg['icemodel'],
-        IceModelLocation=cfg['icemodel_location'],
-        UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
-        IgnoreMuons=ignore_muon_light,
-        HybridMode=hybrid_mode,
+    if not cfg['clsim_input_is_sliced']:
+        MCTreeName="I3MCTree"
+        MMCTrackListName="MMCTrackList"
+    else:
+        MCTreeName="I3MCTree_sliced"
+        MMCTrackListName=None
+
+    # tray.AddSegment(
+    #     segments.PropagatePhotons,
+    #     "PropagatePhotons",
+    #     GCDFile=cfg['gcd'],
+    #     RandomService=random_service,
+    #     KeepIndividualMaps=cfg['clsim_keep_mcpe'],
+    #     IceModel=cfg['icemodel'],
+    #     IceModelLocation=cfg['icemodel_location'],
+    #     UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
+    #     IgnoreMuons=ignore_muon_light,
+    #     HybridMode=hybrid_mode,
+    #     UseGPUs=use_gpus,
+    #     UseAllCPUCores=use_cpus,
+    #     DOMOversizeFactor=cfg['clsim_dom_oversize'],
+    #     CascadeService=cascade_tables,
+    #     **additional_clsim_params)
+
+    tray.AddSegment(clsim.I3CLSimMakeHits, "makeCLSimHits",
+        GCDFile = cfg['gcd'],
+        PhotonSeriesName = cfg['photonSeriesName'],
+        MCTreeName = MCTreeName,
+        MMCTrackListName = MMCTrackListName,
+        RandomService = random_service,
+        MCPESeriesName = "MCPESeriesMap",
+        UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
         UseGPUs=use_gpus,
-        UseAllCPUCores=use_cpus,
-        DOMOversizeFactor=cfg['clsim_dom_oversize'],
-        CascadeService=cascade_tables,
-        **additional_clsim_params)
+        UseCPUs=use_cpus,
+        IceModelLocation=expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
+        )
+
 
     outfile = outfile.replace(' ', '0')
     tray.AddModule("I3Writer", "writer",

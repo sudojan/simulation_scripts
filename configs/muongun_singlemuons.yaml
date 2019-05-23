@@ -33,7 +33,8 @@ seed: 1337
 keep_crashed_files: False
 
 # PATH to the GCD File
-gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
+# gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
+gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
 
 # ------------------------------------------- #
 ##### for the muon generation/propagation #####
@@ -115,7 +116,7 @@ icemodel_location:
 
 # CLSIM specific options
 # Ratio of the dom not shadowed by calbes other anything else
-clsim_unshadowed_fraction: 0.9
+clsim_unshadowed_fraction: 0.95
 # whether direct light of muons should be ignored
 clsim_ignore_muon_light: False
 # Run CLSIM using GPUS
@@ -126,6 +127,11 @@ clsim_dom_oversize: 5.
 clsim_keep_mcpe: False
 # Whether CLsim should run in hybrid mode
 clsim_hybrid_mode: False
+# keep None if you don't want to keep the photon data
+# or they should be kept: 'PropagatedPhotons'
+photonSeriesName: None
+# using the sliced Muon Track for clsim
+clsim_input_is_sliced: False
 
 
 # Detector Simulation
