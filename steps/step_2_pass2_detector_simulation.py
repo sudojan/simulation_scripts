@@ -1,5 +1,5 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v2/icetray-start
-#METAPROJECT simulation/V05-01-01
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import os
 
 import click
@@ -11,16 +11,16 @@ from icecube import icetray, dataclasses, dataio, phys_services
 from utils import create_random_services, get_run_folder
 
 
-MCPE_SERIES_MAP = 'I3MCPESeriesMap'
+MCPE_SERIES_MAP = 'MCPESeriesMap'
 SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
     with open(cfg, 'r') as stream:
-        cfg = yaml.load(stream)
+        cfg = yaml.load(stream, Loader=yaml.Loader)
     cfg['run_number'] = run_number
     cfg['run_folder'] = get_run_folder(run_number)
     infile = cfg['infile_pattern'].format(**cfg)
@@ -50,7 +50,7 @@ def main(cfg, run_number, scratch):
     random_service = random_services[0]
     tray.context['I3RandomService'] = random_service
 
-    tray.Add('I3Reader', FilenameList=[cfg['gcd_pass2'], infile])
+    tray.Add('I3Reader', FilenameList=[cfg['gcd'], infile])
 
     if run_number < cfg['det_pass2_keep_all_upto']:
         cfg['det_keep_mc_hits'] = True
@@ -60,7 +60,7 @@ def main(cfg, run_number, scratch):
     tray.AddSegment(segments.DetectorSim, "Detector5Sim",
         RandomService='I3RandomService',
         RunID=run_id,
-        GCDFile=cfg['gcd_pass2'],
+        GCDFile=cfg['gcd'],
         KeepMCHits=cfg['det_keep_mc_hits'],
         KeepPropagatedMCTree=cfg['det_keep_propagated_mc_tree'],
         KeepMCPulses=cfg['det_keep_mc_pulses'],
