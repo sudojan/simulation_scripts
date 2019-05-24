@@ -127,9 +127,9 @@ clsim_dom_oversize: 5.
 clsim_keep_mcpe: False
 # Whether CLsim should run in hybrid mode
 clsim_hybrid_mode: False
-# keep None if you don't want to keep the photon data
+# keep None (which is !!null in yaml language) if you don't want to keep the photon data
 # or they should be kept: 'PropagatedPhotons'
-photonSeriesName: None
+photonSeriesName: !!null
 # using the sliced Muon Track for clsim
 clsim_input_is_sliced: False
 
