@@ -55,7 +55,7 @@ def main(cfg, run_number, scratch):
     """The main L1 script"""
     tray.AddModule('I3Reader',
                    'i3 reader',
-                   FilenameList=[cfg['gcd_pass2'], infile])
+                   FilenameList=[cfg['gcd'], infile])
 
     # run online filters
     online_kwargs = {}
@@ -65,7 +65,7 @@ def main(cfg, run_number, scratch):
                 SPLINE_TABLES, 'InfBareMu_mie_abs_z20a10.fits'),
             'SplineRecoTimingTable': os.path.join(
                 SPLINE_TABLES, 'InfBareMu_mie_prob_z20a10.fits'),
-            'hese_followup_base_GCD_filename': cfg['gcd_pass2'],
+            'alert_followup_base_GCD_filename': cfg['gcd'],
         })
     if cfg['L1_pass2_run_gfu'] is not None:
         online_kwargs['gfu_enabled'] = cfg['L1_pass2_run_gfu']
