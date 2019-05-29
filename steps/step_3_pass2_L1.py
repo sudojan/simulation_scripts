@@ -1,5 +1,5 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v2/icetray-start
-#METAPROJECT icerec/V05-01-06
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import os
 
 import click
@@ -11,12 +11,12 @@ from icecube import phys_services
 from icecube.filterscripts import filter_globals
 from icecube.filterscripts.all_filters import OnlineFilter
 from icecube.phys_services.which_split import which_split
-import os, sys, time
 
-import subprocess
-from math import log10, cos, radians
-from optparse import OptionParser
-from os.path import expandvars
+# import os, sys, time
+# import subprocess
+# from math import log10, cos, radians
+# from optparse import OptionParser
+# from os.path import expandvars
 
 
 from utils import get_run_folder, muongun_keys, create_random_services
@@ -26,12 +26,12 @@ SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
 
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
     with open(cfg, 'r') as stream:
-        cfg = yaml.load(stream)
+        cfg = yaml.load(stream, Loader=yaml.Loader)
     cfg['run_number'] = run_number
     cfg['run_folder'] = get_run_folder(run_number)
 
