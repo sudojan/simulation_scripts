@@ -1,5 +1,5 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v1/icetray-start
-#METAPROJECT /home/mboerner/software/i3/IC2012-L3_Muon_V3/build
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import os
 
 import click
@@ -18,12 +18,12 @@ DRIVER_FILE = 'mu_photorec.list'
 
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
     with open(cfg, 'r') as stream:
-        cfg = yaml.load(stream)
+        cfg = yaml.load(stream, Loader=yaml.Loader)
     icetray.logging.set_level("WARN")
     cfg['run_number'] = run_number
     cfg['run_folder'] = get_run_folder(run_number)
@@ -31,7 +31,7 @@ def main(cfg, run_number, scratch):
     infile = infile.replace(' ', '0')
     infile = infile.replace('Level0.{}'.format(cfg['previous_step']),
                             'Level2')
-    infile = infile.replace('2012_pass2', '2012')
+    infile = infile.replace('2012_pass2', 'pass2')
 
     if scratch:
         outfile = cfg['scratchfile_pattern'].format(**cfg)
@@ -40,11 +40,8 @@ def main(cfg, run_number, scratch):
     outfile = outfile.replace('Level0.{}'.format(cfg['step']),
                             'Level3')
     outfile = outfile.replace(' ', '0')
-    outfile = outfile.replace('2012_pass2', '2012')
+    outfile = outfile.replace('2012_pass2', 'pass2')
     print('Outfile != $FINAL_OUT clean up for crashed scripts not possible!')
-
-    outfile = outfile.replace(' ', '0')
-    outfile = outfile.replace('2012_pass2', '2012')
 
     tray = I3Tray()
 
