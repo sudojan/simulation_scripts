@@ -12,13 +12,6 @@ from icecube.filterscripts import filter_globals
 from icecube.filterscripts.all_filters import OnlineFilter
 from icecube.phys_services.which_split import which_split
 
-# import os, sys, time
-# import subprocess
-# from math import log10, cos, radians
-# from optparse import OptionParser
-# from os.path import expandvars
-
-
 from utils import get_run_folder, muongun_keys, create_random_services
 
 

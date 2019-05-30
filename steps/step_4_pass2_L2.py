@@ -1,15 +1,11 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v2/icetray-start
-#METAPROJECT icerec/V05-01-06
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import click
 import yaml
 
-from I3Tray import I3Tray
-from icecube import icetray, dataclasses, dataio
-from icecube.icetray import I3PacketModule
-
 import os
-import sys
-import subprocess
+# import sys
+# import subprocess
 
 from I3Tray import I3Tray
 from icecube import icetray, dataclasses, dataio
@@ -25,12 +21,12 @@ PHOTONICS_DIR = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables'
 
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
     with open(cfg, 'r') as stream:
-        cfg = yaml.load(stream)
+        cfg = yaml.load(stream, Loader=yaml.Loader)
     cfg['run_number'] = run_number
     cfg['run_folder'] = get_run_folder(run_number)
 
@@ -54,7 +50,7 @@ def main(cfg, run_number, scratch):
     """The main L1 script"""
     tray.AddModule('I3Reader',
                    'i3 reader',
-                   FilenameList=[cfg['gcd_pass2'], infile])
+                   FilenameList=[cfg['gcd'], infile])
 
     tray.AddSegment(OfflineFilter,
                     "OfflineFilter",
