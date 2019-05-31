@@ -49,15 +49,17 @@ def main(cfg, run_number, scratch):
         gcdfile=cfg['gcd'],
         infiles=infile,
         output_i3=outfile,
-        output_hd5=None,
-        output_root=None,
+        output_hd5="",
+        output_root="",
         photonicsdir=photonics_dir,
         photonicsdriverdir=photonics_driver_dir,
         photonicsdriverfile='mu_photorec.list',
         infmuonampsplinepath=os.path.join(cfg['spline_table_dir'], cfg['mu_amplitude_spline_table']),
         infmuonprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['mu_timing_spline_table']),
         cascadeampsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_amplitude_spline_table']),
-        cascadeprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_timing_spline_table']))
+        cascadeprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_timing_spline_table']),
+        restore_timewindow_forMC=True)
+
 
     tray.AddModule("TrashCan", "Bye")
     tray.Execute()
