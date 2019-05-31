@@ -49,7 +49,7 @@ def main(cfg, run_number, scratch):
 
     # run online filters
     online_kwargs = {}
-    if SPLINE_TABLES:
+    if cfg['spline_table_dir']:
         online_kwargs.update({
             'SplineRecoAmplitudeTable': os.path.join(cfg['spline_table_dir'], cfg['SplineRecoAmplitudeTable']),
             'SplineRecoTimingTable': os.path.join(cfg['spline_table_dir'], cfg['SplineRecoTimingTable']),
