@@ -53,8 +53,8 @@ def main(cfg, run_number, scratch):
         gcdfile=cfg['gcd'],
         infiles=infile,
         output_i3=outfile,
-        output_hd5=None,
-        output_root=None,
+        output_hd5="",
+        output_root="",
         photonicsdir=photonics_dir,
         photonicsdriverdir=photonics_driver_dir,
         photonicsdriverfile=DRIVER_FILE,
@@ -65,7 +65,8 @@ def main(cfg, run_number, scratch):
         cascadeampsplinepath=os.path.join(SPLINE_TABLES,
                                           'ems_mie_z20_a10.abs.fits'),
         cascadeprobsplinepath=os.path.join(SPLINE_TABLES,
-                                           'ems_mie_z20_a10.prob.fits'))
+                                           'ems_mie_z20_a10.prob.fits'),
+        restore_timewindow_forMC=True)
 
     tray.AddModule("TrashCan", "Bye")
     tray.Execute()
