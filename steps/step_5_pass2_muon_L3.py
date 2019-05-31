@@ -12,10 +12,6 @@ from icecube import icetray, dataio, dataclasses, hdfwriter, phys_services
 
 from icecube.level3_filter_muon.MuonL3TraySegment import MuonL3
 
-SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
-PHOTON_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables'
-DRIVER_FILE = 'mu_photorec.list'
-
 
 @click.command()
 @click.argument('cfg', type=click.Path(exists=True))
@@ -45,7 +41,7 @@ def main(cfg, run_number, scratch):
 
     tray = I3Tray()
 
-    photonics_dir = os.path.join(PHOTON_TABLES, 'SPICEMie')
+    photonics_dir = os.path.join(cfg['photon_tables_dir'], 'SPICEMie')
     photonics_driver_dir = os.path.join(photonics_dir, 'driverfiles')
 
     tray.AddSegment(
@@ -57,15 +53,11 @@ def main(cfg, run_number, scratch):
         output_root=None,
         photonicsdir=photonics_dir,
         photonicsdriverdir=photonics_driver_dir,
-        photonicsdriverfile=DRIVER_FILE,
-        infmuonampsplinepath=os.path.join(SPLINE_TABLES,
-                                          'InfBareMu_mie_abs_z20a10.fits'),
-        infmuonprobsplinepath=os.path.join(SPLINE_TABLES,
-                                           'InfBareMu_mie_prob_z20a10.fits'),
-        cascadeampsplinepath=os.path.join(SPLINE_TABLES,
-                                          'ems_mie_z20_a10.abs.fits'),
-        cascadeprobsplinepath=os.path.join(SPLINE_TABLES,
-                                           'ems_mie_z20_a10.prob.fits'))
+        photonicsdriverfile='mu_photorec.list',
+        infmuonampsplinepath=os.path.join(cfg['spline_table_dir'], cfg['mu_amplitude_spline_table']),
+        infmuonprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['mu_timing_spline_table']),
+        cascadeampsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_amplitude_spline_table']),
+        cascadeprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_timing_spline_table']))
 
     tray.AddModule("TrashCan", "Bye")
     tray.Execute()

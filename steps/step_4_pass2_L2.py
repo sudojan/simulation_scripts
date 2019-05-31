@@ -4,8 +4,6 @@ import click
 import yaml
 
 import os
-# import sys
-# import subprocess
 
 from I3Tray import I3Tray
 from icecube import icetray, dataclasses, dataio
@@ -15,9 +13,6 @@ from icecube.filterscripts.offlineL2.level2_all_filters import OfflineFilter
 from icecube.filterscripts.offlineL2 import SpecialWriter
 
 from utils import get_run_folder
-
-
-PHOTONICS_DIR = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables'
 
 
 @click.command()
@@ -57,7 +52,7 @@ def main(cfg, run_number, scratch):
                     dstfile=None,
                     mc=True,
                     doNotQify=True,
-                    photonicsdir=PHOTONICS_DIR)
+                    photonicsdir=cfg['photon_tables_dir'])
 
     tray.AddModule("I3Writer", "EventWriter",
                    filename=outfile,

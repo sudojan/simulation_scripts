@@ -11,9 +11,6 @@ from icecube import icetray, dataclasses, dataio, phys_services
 from utils import create_random_services, get_run_folder
 
 
-MCPE_SERIES_MAP = 'MCPESeriesMap'
-SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
-
 @click.command()
 @click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
@@ -66,7 +63,7 @@ def main(cfg, run_number, scratch):
         KeepMCPulses=cfg['det_keep_mc_pulses'],
         SkipNoiseGenerator=cfg['det_skip_noise_generation'],
         LowMem=cfg['det_low_mem'],
-        InputPESeriesMapName=MCPE_SERIES_MAP,
+        InputPESeriesMapName=cfg['mcpe_series_map'],
         BeaconLaunches=cfg['det_add_beacon_launches'],
         FilterTrigger=cfg['det_filter_trigger'])
     tray.AddModule("I3Writer", "EventWriter",

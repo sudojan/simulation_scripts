@@ -15,9 +15,6 @@ from icecube.phys_services.which_split import which_split
 from utils import get_run_folder, muongun_keys, create_random_services
 
 
-SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
-
-
 @click.command()
 @click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
@@ -54,10 +51,8 @@ def main(cfg, run_number, scratch):
     online_kwargs = {}
     if SPLINE_TABLES:
         online_kwargs.update({
-            'SplineRecoAmplitudeTable': os.path.join(
-                SPLINE_TABLES, 'InfBareMu_mie_abs_z20a10.fits'),
-            'SplineRecoTimingTable': os.path.join(
-                SPLINE_TABLES, 'InfBareMu_mie_prob_z20a10.fits'),
+            'SplineRecoAmplitudeTable': os.path.join(cfg['spline_table_dir'], cfg['SplineRecoAmplitudeTable']),
+            'SplineRecoTimingTable': os.path.join(cfg['spline_table_dir'], cfg['SplineRecoTimingTable']),
             'alert_followup_base_GCD_filename': cfg['gcd'],
         })
     if cfg['L1_pass2_run_gfu'] is not None:

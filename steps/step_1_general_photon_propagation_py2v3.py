@@ -19,9 +19,6 @@ from utils import create_random_services, get_run_folder
 from dom_distance_cut import generate_stream_object
 
 
-SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
-
-
 def process_single_stream(cfg, infile, outfile):
     click.echo('Input: {}'.format(infile))
     hybrid_mode = (cfg['clsim_hybrid_mode'] and
@@ -54,7 +51,7 @@ def process_single_stream(cfg, infile, outfile):
 
     if hybrid_mode:
         cascade_tables = segments.LoadCascadeTables(IceModel=cfg['icemodel'],
-                                                    TablePath=SPLINE_TABLES)
+                                                    TablePath=cfg['spline_table_dir'])
     else:
         cascade_tables = None
 
@@ -101,7 +98,7 @@ def process_single_stream(cfg, infile, outfile):
         MCTreeName = MCTreeName,
         MMCTrackListName = MMCTrackListName,
         RandomService = random_service,
-        MCPESeriesName = "MCPESeriesMap",
+        MCPESeriesName = cfg['mcpe_series_map'],
         UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
         UseGPUs = use_gpus,
         UseCPUs = use_cpus,
