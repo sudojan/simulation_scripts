@@ -19,6 +19,7 @@ step_to_level_map:
   3: 'Level1'
   4: 'Level2'
   5: 'Level3'
+  6: 'Level3.1'
 
 
 # sub-dict to indicate need resources
