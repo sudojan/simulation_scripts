@@ -21,6 +21,16 @@ step_to_level_map:
   5: 'Level3'
   6: 'Level3.1'
 
+job_template: general_py2-v3.1.1.sh
+
+step_name_map:
+  0: step_0_general_muongun
+  1: step_1_general_photon_propagation
+  2: step_2_pass2_detector_simulation
+  3: step_3_pass2_L1
+  4: step_4_pass2_L2
+  5: step_5_pass2_muon_L3
+  6: step_6_dnn_labels
 
 # sub-dict to indicate need resources
 resources:

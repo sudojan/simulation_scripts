@@ -42,6 +42,18 @@ def fetch_chain(chain_name):
         step_enum = chain_definition['steps']
     return step_enum, default_config, job_template
 
+def get_step_name(config, step):
+    if 'step_name_map' in config:
+        if step in config['step_name_map']:
+            return config['step_name_map'][step]
+        else:
+            click.echo('The step_name_map has not step {}'.format(step))
+            click.echo('So use default None')
+            return None
+
+    raise KeyError('step_name_map not defined in config')
+
+
 def get_level_name_from_step(config, step):
     if 'step_to_level_map' in config:
         if step in config['step_to_level_map']:
@@ -185,12 +197,12 @@ def main(data_folder,
         custom_settings = SafeDict(yaml.load(stream, Loader=yaml.Loader))
     chain_name = custom_settings['chain_name']
     click.echo('Initialized {} chain!'.format(chain_name))
-    step_enum, default_config, job_template = fetch_chain(chain_name)
+    # step_enum, default_config, job_template = fetch_chain(chain_name)
     custom_settings.update({
         'step': step,
-        'step_name': step_enum[step],
+        'step_name': get_step_name(custom_settings, step),
         'step_level_name': get_level_name_from_step(custom_settings, step),
-        'previous_step_name': step_enum.get(step - 1, None),
+        'previous_step_name': get_step_name(custom_settings, step - 1),
         'previous_step': step - 1})
 
     if 'outfile_pattern' in custom_settings.keys():
@@ -200,13 +212,16 @@ def main(data_folder,
         step = config['step'] + 1
         config.update({
             'step': step,
-            'step_name': step_enum[step],
-            'previous_step_name': step_enum.get(step - 1, None)})
+            'step_name': get_step_name(custom_settings, step),
+            'previous_step_name': get_step_name(custom_settings, step - 1)})
         if 'processing_scratch' in config.keys():
             processing_scratch = config['processing_scratch']
     else:
         click.echo('Building config from scratch!')
-        custom_settings['default_config'] = default_config
+        custom_settings['default_config'] = config_file
+        job_template = custom_settings['job_template']
+        if not os.path.isabs(job_template):
+            job_template = os.path.join(SCRIPT_FOLDER, 'job_templates', job_template)
         custom_settings['job_template'] = job_template
         config = build_config(data_folder, custom_settings)
         config['infile_pattern'] = create_filename(config, input=True)
