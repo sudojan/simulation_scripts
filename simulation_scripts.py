@@ -101,6 +101,8 @@ def write_job_files(config, step, check_existing=False,
         config['run_folder'] = get_run_folder(i)
         final_out = config['outfile_pattern'].format(**config)
         final_out = final_out.replace(' ', '0')
+        # change the following line if you want resume
+        #final_out = final_out.replace('Level0.{}'.format(config['step']), 'Level3')
         config['final_out'] = final_out
         if check_existing:
             if os.path.isfile(config['final_out']):
