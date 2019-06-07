@@ -13,6 +13,7 @@ n_runs: 100
 output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
 # sub-dict to map step to processing level state
 step_to_level_map:
+  default: 'Level0.{step}'
   0: 'Level0.0'
   1: 'Level0.1'
   2: 'Level0.2'
@@ -21,9 +22,12 @@ step_to_level_map:
   5: 'Level3'
   6: 'Level3.1'
 
-job_template: general_py2-v3.1.1.sh
+job_template_map:
+  default: general_py2-v3.1.1.sh
+  6: general_py2-v3.0.1.sh
 
 step_name_map:
+  default: 'step_{step}'
   0: step_0_general_muongun
   1: step_1_general_photon_propagation
   2: step_2_pass2_detector_simulation
