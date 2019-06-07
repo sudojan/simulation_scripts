@@ -9,6 +9,18 @@ n_runs: 100
 
 # Pattern for the outputfile
 output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+# the step_to_level_map will replace the 'Level0.{step}' in the future
+# output_pattern: '{run_folder}/{step_level}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+# sub-dict to map step to processing level state
+step_to_level_map:
+  0: 'Level0.0'
+  1: 'Level0.1'
+  2: 'Level0.2'
+  3: 'Level1'
+  4: 'Level2'
+  5: 'Level3'
+
+
 # sub-dict to indicate need resources
 resources:
   # Indication which steps need GPUs, default is 0
@@ -16,7 +28,6 @@ resources:
     1: 1
   # Indication of needed memory for each step if nothing is set 1GB is assumed as default
   memory:
-    1: 6gb
     2: 3gb
     3: 3gb
     4: 3gb
@@ -36,6 +47,27 @@ keep_crashed_files: False
 # PATH to the GCD File
 # gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
 gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
+
+# ----------------------------------- #
+#    path to photon tables tables     #
+# ----------------------------------- #
+# path to photon tables
+photon_tables_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables
+# path to spline tables
+spline_table_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines
+# SPICE Mie infinite muons produced using PPC
+# amplitude
+mu_amplitude_spline_table: InfBareMu_mie_abs_z20a10_V2.fits
+# time
+mu_timing_spline_table: InfBareMu_mie_prob_z20a10_V2.fits
+# SPICE-Mie pointlike shower tables produced using
+# Photonics (ems_mie_*.fits) or clsim tablemaker (cascades_clsim_mie_*.fits)
+# amplitude: (*.abs.fits)
+cascade_amplitude_spline_table: cascades_clsim_mie_z20_a10.abs.fits
+# time: (*.prob.fits)
+cascade_timing_spline_table: cascades_clsim_mie_z20_a10.prob.fits
+
+
 
 # ------------------------------------------- #
 ##### for the muon generation/propagation #####
@@ -126,13 +158,15 @@ clsim_usegpus: False
 clsim_dom_oversize: 5.
 # Whether I3MCPE list should be stored
 clsim_keep_mcpe: False
-# Whether CLsim should run in hybrid mode
+# Whether CLsim should run in hybrid mode (needs the spline_table_dir)
 clsim_hybrid_mode: False
 # keep None (which is !!null in yaml language) if you don't want to keep the photon data
 # or they should be kept: 'PropagatedPhotons'
 photonSeriesName: !!null
 # using the sliced Muon Track for clsim
 clsim_input_is_sliced: False
+# name should be the same in detector simulation
+mcpe_series_map: MCPESeriesMap
 
 
 # Detector Simulation
@@ -165,5 +199,8 @@ L1_2012_dom_simulator: False
 L1_2012_qify: False
 # Retrigger
 L1_2012_retrigger: False
-# Run GFU
+# Run GFU -> needs spline tables
 L1_pass2_run_gfu: true
+
+
+

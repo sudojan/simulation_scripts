@@ -1,5 +1,5 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v2/icetray-start
-#METAPROJECT simulation/V05-01-01
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
 import os
 import sys
 
@@ -14,13 +14,9 @@ import numpy as np
 from icecube.simprod import segments
 
 from I3Tray import I3Tray
-from icecube import icetray, dataclasses, dataio, phys_services
+from icecube import icetray, dataclasses, dataio, phys_services, clsim
 from utils import create_random_services, get_run_folder
 from dom_distance_cut import generate_stream_object
-
-
-MAX_PARALLEL_EVENTS = 50
-SPLINE_TABLES = '/cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines'
 
 
 def process_single_stream(cfg, infile, outfile):
@@ -55,7 +51,7 @@ def process_single_stream(cfg, infile, outfile):
 
     if hybrid_mode:
         cascade_tables = segments.LoadCascadeTables(IceModel=cfg['icemodel'],
-                                                    TablePath=SPLINE_TABLES)
+                                                    TablePath=cfg['spline_table_dir'])
     else:
         cascade_tables = None
 
@@ -71,22 +67,44 @@ def process_single_stream(cfg, infile, outfile):
     else:
         additional_clsim_params = {}
 
-    tray.AddSegment(
-        segments.PropagatePhotons,
-        "PropagatePhotons",
-        RandomService=random_service,
-        MaxParallelEvents=MAX_PARALLEL_EVENTS,
-        KeepIndividualMaps=cfg['clsim_keep_mcpe'],
-        IceModel=cfg['icemodel'],
-        IceModelLocation=cfg['icemodel_location'],
-        UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
-        IgnoreMuons=ignore_muon_light,
-        HybridMode=hybrid_mode,
-        UseGPUs=use_gpus,
-        UseAllCPUCores=use_cpus,
-        DOMOversizeFactor=cfg['clsim_dom_oversize'],
-        CascadeService=cascade_tables,
-        **additional_clsim_params)
+    if not cfg['clsim_input_is_sliced']:
+        MCTreeName="I3MCTree"
+        MMCTrackListName="MMCTrackList"
+    else:
+        MCTreeName="I3MCTree_sliced"
+        MMCTrackListName=None
+    #use_gpus=False
+    #use_cpus=True
+    #tray.AddSegment(
+    #    segments.PropagatePhotons,
+    #    "PropagatePhotons",
+    #    GCDFile=cfg['gcd'],
+    #    RandomService=random_service,
+    #    KeepIndividualMaps=cfg['clsim_keep_mcpe'],
+    #    IceModel=cfg['icemodel'],
+    #    IceModelLocation=cfg['icemodel_location'],
+    #    UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
+    #    IgnoreMuons=ignore_muon_light,
+    #    HybridMode=hybrid_mode,
+    #    UseGPUs=use_gpus,
+    #    UseAllCPUCores=use_cpus,
+    #    DOMOversizeFactor=cfg['clsim_dom_oversize'],
+    #    CascadeService=cascade_tables,
+    #    **additional_clsim_params)
+
+    tray.AddSegment(clsim.I3CLSimMakeHits, "makeCLSimHits",
+        GCDFile = cfg['gcd'],
+        PhotonSeriesName = cfg['photonSeriesName'],
+        MCTreeName = MCTreeName,
+        MMCTrackListName = MMCTrackListName,
+        RandomService = random_service,
+        MCPESeriesName = cfg['mcpe_series_map'],
+        UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
+        UseGPUs = use_gpus,
+        UseCPUs = use_cpus,
+        IceModelLocation = os.path.expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
+        )
+
 
     outfile = outfile.replace(' ', '0')
     tray.AddModule("I3Writer", "writer",
@@ -159,12 +177,12 @@ class ExecProcess(multiprocessing.Process):
 
 
 @click.command()
-@click.argument('cfg', click.Path(exists=True))
+@click.argument('cfg', type=click.Path(exists=True))
 @click.argument('run_number', type=int)
 @click.option('--scratch/--no-scratch', default=True)
 def main(cfg, run_number, scratch):
     with open(cfg, 'r') as stream:
-        cfg = yaml.load(stream)
+        cfg = yaml.load(stream, Loader=yaml.Loader)
     cfg['run_number'] = run_number
     cfg['run_folder'] = get_run_folder(run_number)
 
