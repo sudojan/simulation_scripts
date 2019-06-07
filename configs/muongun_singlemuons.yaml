@@ -8,9 +8,9 @@ n_events_per_run: 1000
 n_runs: 100
 
 # Pattern for the outputfile
-output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+# output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
 # the step_to_level_map will replace the 'Level0.{step}' in the future
-# output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
 # sub-dict to map step to processing level state
 step_to_level_map:
   0: 'Level0.0'
