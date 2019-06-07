@@ -189,7 +189,7 @@ def main(data_folder,
     custom_settings.update({
         'step': step,
         'step_name': step_enum[step],
-        'step_level_name': get_level_name_from_step(custom_settings, step)
+        'step_level_name': get_level_name_from_step(custom_settings, step),
         'previous_step_name': step_enum.get(step - 1, None),
         'previous_step': step - 1})
 
