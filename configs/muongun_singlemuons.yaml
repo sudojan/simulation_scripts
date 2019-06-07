@@ -9,6 +9,18 @@ n_runs: 100
 
 # Pattern for the outputfile
 output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+# the step_to_level_map will replace the 'Level0.{step}' in the future
+# output_pattern: '{run_folder}/{step_level}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
+# sub-dict to map step to processing level state
+step_to_level_map:
+  0: 'Level0.0'
+  1: 'Level0.1'
+  2: 'Level0.2'
+  3: 'Level1'
+  4: 'Level2'
+  5: 'Level3'
+
+
 # sub-dict to indicate need resources
 resources:
   # Indication which steps need GPUs, default is 0
@@ -34,11 +46,12 @@ keep_crashed_files: False
 # PATH to the GCD File
 # gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
 gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
+
+# ----------------------------------- #
+#    path to photon tables tables     #
+# ----------------------------------- #
 # path to photon tables
 photon_tables_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables
-
-
-# parameters for spline tables
 # path to spline tables
 spline_table_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines
 # SPICE Mie infinite muons produced using PPC

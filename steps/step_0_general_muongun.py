@@ -185,6 +185,7 @@ def main(cfg, run_number, scratch):
         outfile = cfg['scratchfile_pattern'].format(**cfg)
     else:
         outfile = cfg['outfile_pattern'].format(**cfg)
+    outfile = outfile.replace(' ', '0')
 
     if cfg['distance_splits'] is not None:
         click.echo('SplittingDistances: {}'.format(cfg['distance_splits']))
@@ -329,17 +330,15 @@ def main(cfg, run_number, scratch):
         raise ValueError(err_msg.format(cfg['MuonGenerator']))
 
 
+    # --------------------------------------
+    # Propagate Muons
+    # --------------------------------------
     tray.AddSegment(
         segments.PropagateMuons,
         "PropagateMuons",
         RandomService=random_service_prop,
         **cfg['muon_propagation_config'])
 
-    if scratch:
-        outfile = cfg['scratchfile_pattern'].format(**cfg)
-    else:
-        outfile = cfg['outfile_pattern'].format(**cfg)
-    outfile = outfile.replace(' ', '0')
 
     # --------------------------------------
     # Distance Splits

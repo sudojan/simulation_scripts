@@ -28,7 +28,7 @@ def main(cfg, run_number, scratch):
     infile = cfg['infile_pattern'].format(**cfg)
     infile = infile.replace(' ', '0')
     infile = infile.replace('Level0.{}'.format(cfg['previous_step']),
-                            'Level0.{}'.format(cfg['previous_step'] % 10))
+                            'Level1')
     infile = infile.replace('2012_pass2', 'pass2')
 
     if scratch:
