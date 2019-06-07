@@ -42,17 +42,26 @@ def fetch_chain(chain_name):
         step_enum = chain_definition['steps']
     return step_enum, default_config, job_template
 
+def get_level_name_from_step(config, step):
+    if 'step_to_level_map' in config:
+        if step in config['step_to_level_map']:
+            return config['step_to_level_map'][step]
+
+    return 'Level0.{}'.format(step)
 
 def create_filename(cfg, input=False):
     if input:
         step_name = cfg['step_name']
         step = cfg['step']
+        step_level_name = cfg['step_level_name']
         cfg['step_name'] = cfg['previous_step_name']
         cfg['step'] = cfg['previous_step']
+        cfg['step_level_name'] = get_level_name_from_step(cfg, cfg['previous_step'])
         filename = cfg['output_pattern'].format(**cfg)
         full_path = os.path.join(cfg['input_folder'], filename)
         cfg['step_name'] = step_name
         cfg['step'] = step
+        cfg['step_level_name'] = step_level_name
     else:
         filename = cfg['output_pattern'].format(**cfg)
         full_path = os.path.join(cfg['output_folder'], filename)
@@ -178,6 +187,7 @@ def main(data_folder,
     custom_settings.update({
         'step': step,
         'step_name': step_enum[step],
+        'step_level_name': get_level_name_from_step(custom_settings, step)
         'previous_step_name': step_enum.get(step - 1, None),
         'previous_step': step - 1})
 
