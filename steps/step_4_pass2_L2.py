@@ -27,22 +27,16 @@ def main(cfg, run_number, scratch):
 
     infile = cfg['infile_pattern'].format(**cfg)
     infile = infile.replace(' ', '0')
-    infile = infile.replace('Level0.{}'.format(cfg['previous_step']),
-                            'Level1')
-    infile = infile.replace('2012_pass2', 'pass2')
 
     if scratch:
         outfile = cfg['scratchfile_pattern'].format(**cfg)
     else:
         outfile = cfg['outfile_pattern'].format(**cfg)
-    outfile = outfile.replace('Level0.{}'.format(cfg['step']),
-                            'Level2')
     outfile = outfile.replace(' ', '0')
-    outfile = outfile.replace('2012_pass2', 'pass2')
-    print('Outfile != $FINAL_OUT clean up for crashed scripts not possible!')
+
 
     tray = I3Tray()
-    """The main L1 script"""
+    """The main L2 script"""
     tray.AddModule('I3Reader',
                    'i3 reader',
                    FilenameList=[cfg['gcd'], infile])
@@ -61,9 +55,9 @@ def main(cfg, run_number, scratch):
                             icetray.I3Frame.TrayInfo,
                             icetray.I3Frame.Simulation],
                    DropOrphanStreams=[icetray.I3Frame.DAQ])
-    tray.AddModule("TrashCan", "the can")
+
     tray.Execute()
-    tray.Finish()
+
     del tray
 
 

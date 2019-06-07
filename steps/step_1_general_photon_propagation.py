@@ -113,7 +113,7 @@ def process_single_stream(cfg, infile, outfile):
                             icetray.I3Frame.Physics,
                             icetray.I3Frame.Stream('S'),
                             icetray.I3Frame.Stream('M')])
-    tray.AddModule("TrashCan", "the can")
+
     tray.Execute()
     tray.Finish()
 
@@ -146,7 +146,7 @@ def merge(infiles, outfile):
                             icetray.I3Frame.Physics,
                             icetray.I3Frame.Stream('S'),
                             icetray.I3Frame.Stream('M')])
-    tray.AddModule("TrashCan", "the can")
+
     tray.Execute()
     tray.Finish()
     for file_i in infiles:

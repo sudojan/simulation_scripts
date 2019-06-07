@@ -25,25 +25,19 @@ def main(cfg, run_number, scratch):
     cfg['run_folder'] = get_run_folder(run_number)
     infile = cfg['infile_pattern'].format(**cfg)
     infile = infile.replace(' ', '0')
-    infile = infile.replace('Level0.{}'.format(cfg['previous_step']),
-                            'Level2')
-    infile = infile.replace('2012_pass2', 'pass2')
 
     if scratch:
         outfile = cfg['scratchfile_pattern'].format(**cfg)
     else:
         outfile = cfg['outfile_pattern'].format(**cfg)
-    outfile = outfile.replace('Level0.{}'.format(cfg['step']),
-                            'Level3')
     outfile = outfile.replace(' ', '0')
-    outfile = outfile.replace('2012_pass2', 'pass2')
-    print('Outfile != $FINAL_OUT clean up for crashed scripts not possible!')
-
-    tray = I3Tray()
 
     photonics_dir = os.path.join(cfg['photon_tables_dir'], 'SPICEMie')
     photonics_driver_dir = os.path.join(photonics_dir, 'driverfiles')
 
+
+    tray = I3Tray()
+    """The main L3 script"""
     tray.AddSegment(
         MuonL3,
         gcdfile=cfg['gcd'],
@@ -60,10 +54,9 @@ def main(cfg, run_number, scratch):
         cascadeprobsplinepath=os.path.join(cfg['spline_table_dir'], cfg['cascade_timing_spline_table']),
         restore_timewindow_forMC=True)
 
-
-    tray.AddModule("TrashCan", "Bye")
     tray.Execute()
-    tray.Finish()
+
+    del tray
 
 if __name__ == '__main__':
     main()

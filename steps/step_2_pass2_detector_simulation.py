@@ -22,18 +22,13 @@ def main(cfg, run_number, scratch):
     cfg['run_folder'] = get_run_folder(run_number)
     infile = cfg['infile_pattern'].format(**cfg)
     infile = infile.replace(' ', '0')
-    infile = infile.replace('Level0.{}'.format(cfg['previous_step']),
-                            'Level0.{}'.format(cfg['previous_step'] % 10))
 
     if scratch:
         outfile = cfg['scratchfile_pattern'].format(**cfg)
     else:
         outfile = cfg['outfile_pattern'].format(**cfg)
-    outfile = outfile.replace('Level0.{}'.format(cfg['step']),
-                              'Level0.{}'.format(cfg['step'] % 10))
     outfile = outfile.replace(' ', '0')
-    outfile = outfile.replace('2012_pass2', 'pass2')
-    print('Outfile != $FINAL_OUT clean up for crashed scripts not possible!')
+
 
     tray = I3Tray()
 
@@ -72,9 +67,10 @@ def main(cfg, run_number, scratch):
                             icetray.I3Frame.Physics,
                             icetray.I3Frame.TrayInfo,
                             icetray.I3Frame.Simulation])
-    tray.AddModule("TrashCan", "the can")
+
     tray.Execute()
-    tray.Finish()
+
+    del tray
 
 
 if __name__ == '__main__':

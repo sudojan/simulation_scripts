@@ -387,9 +387,10 @@ def main(cfg, run_number, scratch):
                                 icetray.I3Frame.Stream('M')])
 
     click.echo('Scratch: {}'.format(scratch))
-    tray.AddModule("TrashCan", "the can")
+
     tray.Execute()
-    tray.Finish()
+
+    del tray
 
 
 if __name__ == '__main__':
