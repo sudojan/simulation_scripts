@@ -47,12 +47,12 @@ def main(cfg, run_number, scratch):
     if add_cascade_labels:
         tray.AddModule(modules.MCLabelsCascadeParameters, 'MCLabelsCascadeParameters',
                        PulseMapString='InIcePulses',
-                       PrimaryKey='MCPrimary',
+                       PrimaryKey='MCPrimary1',
                        OutputKey='LabelsDeepLearning')
     else:
         tray.AddModule(modules.MCLabelsDeepLearning, 'MCLabelsDeepLearning',
                        PulseMapString='InIcePulses',
-                       PrimaryKey='MCPrimary',
+                       PrimaryKey='MCPrimary1',
                        OutputKey='LabelsDeepLearning',
                        IsMuonGun=True)
 

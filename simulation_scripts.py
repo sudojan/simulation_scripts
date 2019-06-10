@@ -204,7 +204,7 @@ def main(data_folder,
     else:
         click.echo('Building config from scratch!')
         custom_settings['default_config'] = config_file
-        job_template = get_attribute_from_step(custom_settings, step, 'job_template')
+        job_template = get_attribute_from_step(custom_settings, step, 'job_template_map')
         if not os.path.isabs(job_template):
             job_template = os.path.join(SCRIPT_FOLDER, 'job_templates', job_template)
         custom_settings['job_template'] = job_template

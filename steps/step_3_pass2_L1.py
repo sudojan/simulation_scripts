@@ -112,7 +112,7 @@ def main(cfg, run_number, scratch):
         'I3MCTree',
         'I3MCTreePEcounts',
         'I3MCTree_preMuonProp',
-        'I3MCPESeriesMap',
+        cfg['mcpe_series_map'],
         'I3MCPulseSeriesMap',
         'I3MCPulseSeriesMapParticleIDMap',
         'I3MCWeightDict',
