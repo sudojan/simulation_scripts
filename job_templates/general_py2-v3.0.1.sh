@@ -33,24 +33,10 @@ unset PKG_CONFIG_PATH
 # ToDo: find a clean way to define which python version to load.
 # Possibly define job template for each step and each job template is only
 # to be used for that python version
-if [ {step} -eq 0 ] || [ {step} -eq 5 ] ; then
-    echo 'Loading py2-v3.0.1'
-    eval `/cvmfs/icecube.opensciencegrid.org/py2-v3.0.1/setup.sh`
-    export PYTHONUSERBASE=/data/user/mhuennefeld/DNN_reco/virtualenvs/tensorflow_cpu_py2-v3.0.1/
-    echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
-else
-    if [ {step} -le 12 ] ; then
-        echo 'Loading py2-v2'
-        eval `/cvmfs/icecube.opensciencegrid.org/py2-v2/setup.sh`
-        export PYTHONUSERBASE=/home/mboerner/software/python_libs
-        echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
-    else
-        echo 'Loading py2-v1'
-        eval `/cvmfs/icecube.opensciencegrid.org/py2-v1/setup.sh`
-        export PYTHONUSERBASE=/home/mboerner/software/python_libs_py2_v1
-        echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
-    fi
-fi
+echo 'Loading py2-v3.0.1'
+eval `/cvmfs/icecube.opensciencegrid.org/py2-v3.0.1/setup.sh`
+export PYTHONUSERBASE=/data/user/mhuennefeld/DNN_reco/virtualenvs/tensorflow_cpu_py2-v3.0.1/
+echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
 
 export PATH=$PYTHONUSERBASE/bin:$PATH
 export PYTHONPATH=$PYTHONUSERBASE/lib/python2.7/site-packages:$PYTHONPATH

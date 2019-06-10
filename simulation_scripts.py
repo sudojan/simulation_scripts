@@ -24,35 +24,32 @@ class SafeDict(dict):
         return '{' + key + '}'
 
 
-def fetch_chain(chain_name):
-    processing_chains_f = os.path.join(SCRIPT_FOLDER, 'processing_chains.yaml')
-    with open(processing_chains_f, 'r') as stream:
-        processing_chains = SafeDict(yaml.load(stream, Loader=yaml.Loader))
-    try:
-        chain_definition = processing_chains[chain_name]
-    except KeyError:
-        click.echo("Not chain called '' found!".format(chain_name))
-    else:
-        default_config = chain_definition['default_config']
-        if not os.path.isabs(default_config):
-            default_config = os.path.join(SCRIPT_FOLDER, default_config)
-        job_template = chain_definition['job_template']
-        if not os.path.isabs(job_template):
-            job_template = os.path.join(SCRIPT_FOLDER, job_template)
-        step_enum = chain_definition['steps']
-    return step_enum, default_config, job_template
+def get_attribute_from_step(config, step, attibute_map):
+    if attibute_map in config:
+        if step in config[attibute_map]:
+            return config[attibute_map][step]
+        elif 'default' in config[attibute_map]:
+            return config[attibute_map]['default'].format(step=step)
+        else:
+            return KeyError('No step {} or default defined in {}'.format(step, attibute_map))
 
+    return KeyError('{} not defined in config'.format(attibute_map))
 
 def create_filename(cfg, input=False):
     if input:
         step_name = cfg['step_name']
         step = cfg['step']
+        step_level_name = cfg['step_level_name']
         cfg['step_name'] = cfg['previous_step_name']
         cfg['step'] = cfg['previous_step']
+        cfg['step_level_name'] = get_attribute_from_step(cfg,
+                                                         cfg['previous_step'],
+                                                         'step_to_level_map')
         filename = cfg['output_pattern'].format(**cfg)
         full_path = os.path.join(cfg['input_folder'], filename)
         cfg['step_name'] = step_name
         cfg['step'] = step
+        cfg['step_level_name'] = step_level_name
     else:
         filename = cfg['output_pattern'].format(**cfg)
         full_path = os.path.join(cfg['output_folder'], filename)
@@ -92,6 +89,8 @@ def write_job_files(config, step, check_existing=False,
         config['run_folder'] = get_run_folder(i)
         final_out = config['outfile_pattern'].format(**config)
         final_out = final_out.replace(' ', '0')
+        # change the following line if you want resume
+        #final_out = final_out.replace('Level0.{}'.format(config['step']), 'Level3')
         config['final_out'] = final_out
         if check_existing:
             if os.path.isfile(config['final_out']):
@@ -174,11 +173,17 @@ def main(data_folder,
         custom_settings = SafeDict(yaml.load(stream, Loader=yaml.Loader))
     chain_name = custom_settings['chain_name']
     click.echo('Initialized {} chain!'.format(chain_name))
-    step_enum, default_config, job_template = fetch_chain(chain_name)
     custom_settings.update({
         'step': step,
-        'step_name': step_enum[step],
-        'previous_step_name': step_enum.get(step - 1, None),
+        'step_name': get_attribute_from_step(custom_settings,
+                                             step,
+                                             'step_name_map'),
+        'step_level_name': get_attribute_from_step(custom_settings,
+                                                   step,
+                                                   'step_to_level_map'),
+        'previous_step_name': get_attribute_from_step(custom_settings,
+                                                      step - 1,
+                                                      'step_name_map'),
         'previous_step': step - 1})
 
     if 'outfile_pattern' in custom_settings.keys():
@@ -188,13 +193,20 @@ def main(data_folder,
         step = config['step'] + 1
         config.update({
             'step': step,
-            'step_name': step_enum[step],
-            'previous_step_name': step_enum.get(step - 1, None)})
+            'step_name': get_attribute_from_step(custom_settings,
+                                                 step,
+                                                 'step_name_map'),
+            'previous_step_name': get_attribute_from_step(custom_settings,
+                                                          step - 1,
+                                                          'step_name_map')})
         if 'processing_scratch' in config.keys():
             processing_scratch = config['processing_scratch']
     else:
         click.echo('Building config from scratch!')
-        custom_settings['default_config'] = default_config
+        custom_settings['default_config'] = config_file
+        job_template = get_attribute_from_step(custom_settings, step, 'job_template_map')
+        if not os.path.isabs(job_template):
+            job_template = os.path.join(SCRIPT_FOLDER, 'job_templates', job_template)
         custom_settings['job_template'] = job_template
         config = build_config(data_folder, custom_settings)
         config['infile_pattern'] = create_filename(config, input=True)

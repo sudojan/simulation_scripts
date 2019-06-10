@@ -12,8 +12,6 @@
 FINAL_OUT={final_out}
 KEEP_CRASHED_FILES={keep_crashed_files}
 
-
-
 echo 'Loading py2-v3.1.1'
 eval `/cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/setup.sh`
 export PYTHONUSERBASE=/home/jsoedingrekso/software/python2libs/
@@ -23,7 +21,7 @@ export PATH=$PYTHONUSERBASE/bin:$PATH
 export PYTHONPATH=$PYTHONUSERBASE/lib/python2.7/site-packages:$PYTHONPATH
 echo 'Using PYTHONPATH: '${PYTHONPATH}
 
-echo $FINAL_OUT
+echo 'FINAL_OUT: '$FINAL_OUT
 if [ -z ${PBS_JOBID} ] && [ -z ${_CONDOR_SCRATCH_DIR} ]
 then
     echo 'Running Script w/o temporary scratch'
