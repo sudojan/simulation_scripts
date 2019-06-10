@@ -54,7 +54,7 @@ def main(cfg, run_number, scratch):
         tray.AddModule(modules.MCLabelsDeepLearning, 'MCLabelsDeepLearning',
                        PulseMapString='InIcePulses',
                        PrimaryKey='MCPrimary1',
-                       MCPESeriesMapName='MCPESeriesMap',
+                       MCPESeriesMapName=cfg['mcpe_series_map'],
                        OutputKey='LabelsDeepLearning',
                        IsMuonGun=True)
 

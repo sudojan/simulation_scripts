@@ -24,7 +24,7 @@ step_to_level_map:
 
 job_template_map:
   default: general_py2-v3.1.1.sh
-  6: general_py2-v3.0.1.sh
+#  6: general_py2-v3.0.1.sh
 
 step_name_map:
   default: 'step_{step}'
