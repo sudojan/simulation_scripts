@@ -46,9 +46,9 @@ def main(cfg, run_number, scratch):
     if cfg['spline_table_dir']:
         online_kwargs.update({
             'SplineRecoAmplitudeTable': os.path.join(cfg['spline_table_dir'],
-                                                     cfg['SplineRecoAmplitudeTable']),
+                                                     cfg['mu_amplitude_spline_table']),
             'SplineRecoTimingTable': os.path.join(cfg['spline_table_dir'],
-                                                  cfg['SplineRecoTimingTable']),
+                                                  cfg['mu_timing_spline_table']),
             'alert_followup_base_GCD_filename': cfg['gcd'],
         })
     if cfg['L1_pass2_run_gfu'] is not None:
