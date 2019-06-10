@@ -1,5 +1,6 @@
-#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.0.1/icetray-start
-#METAPROJECT /data/user/mhuennefeld/software/icecube/py2-v3.0.1/combo_trunk/build
+#!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
+#METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
+# #METAPROJECT /data/user/mhuennefeld/software/icecube/py2-v3.0.1/combo_trunk/build
 import os
 
 import click
@@ -45,7 +46,7 @@ def main(cfg, run_number, scratch):
     #--------------------------------------------------
     add_cascade_labels = False
     if add_cascade_labels:
-        tray.AddModule(modules.MCLabelsCascadeParameters, 'MCLabelsCascadeParameters',
+        tray.AddModule(modules.MCLabelsCascades, 'MCLabelsCascade',
                        PulseMapString='InIcePulses',
                        PrimaryKey='MCPrimary1',
                        OutputKey='LabelsDeepLearning')
@@ -53,6 +54,7 @@ def main(cfg, run_number, scratch):
         tray.AddModule(modules.MCLabelsDeepLearning, 'MCLabelsDeepLearning',
                        PulseMapString='InIcePulses',
                        PrimaryKey='MCPrimary1',
+                       MCPESeriesMapName='MCPESeriesMap',
                        OutputKey='LabelsDeepLearning',
                        IsMuonGun=True)
 
