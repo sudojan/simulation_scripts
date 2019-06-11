@@ -21,10 +21,11 @@ step_to_level_map:
   4: 'Level2'
   5: 'Level3'
   6: 'Level3.1'
+  7: 'Level3.2'
 
 job_template_map:
   default: general_py2-v3.1.1.sh
-#  6: general_py2-v3.0.1.sh
+  7: general_py2-v3.0.1.sh
 
 step_name_map:
   default: 'step_{step}'
@@ -35,12 +36,14 @@ step_name_map:
   4: step_4_pass2_L2
   5: step_5_pass2_muon_L3
   6: step_6_dnn_labels
+  7: step_7_dnn_reco
 
 # sub-dict to indicate need resources
 resources:
   # Indication which steps need GPUs, default is 0
   gpus:
     1: 1
+    7: 1
   # Indication of needed memory for each step if nothing is set 1GB is assumed as default
   memory:
     2: 3gb
@@ -51,6 +54,7 @@ resources:
   walltime:
   # Indication of the number of cores for each step, default is 1
   cpus:
+    7: 1
 
 
 # Options used in the steps
@@ -218,4 +222,15 @@ L1_2012_retrigger: False
 L1_pass2_run_gfu: true
 
 
+
+#------------------------------
+# DNN_reco Settings
+#------------------------------
+DNN_excluded_doms: [] # ['SaturationWindows','BadDomsList','CalibrationErrata','BrightDOMs']
+DNN_partial_exclusion: True
+DNN_pulse_key: InIcePulses
+DNN_output_base_name: 'DeepLearning'
+DNN_model: general_tukey
+DNN_model_directory: /data/user/mhuennefeld/DNN_reco/models
+DNN_measure_time: True
 
