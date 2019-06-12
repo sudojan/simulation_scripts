@@ -61,14 +61,15 @@ class MuonRemoveChildren(icetray.I3ConditionalModule):
 
         for track in tracks:
             parent = mctree.get_particle(track.particle)
-            mctree = self.remove(mctree, parent, self._detector)
+            mctree = self.remove(mctree, track, parent, self._detector)
 
+        frame.Delete('I3MCTree')
         frame[self._output] = mctree
 
         self.PushFrame(frame)
 
     @staticmethod
-    def remove(mctree, parent, detector):
+    def remove(mctree, track, parent, detector):
         r"""Remove children from MC tree.
 
         Remove the children of the given parent particle from the given
@@ -78,6 +79,8 @@ class MuonRemoveChildren(icetray.I3ConditionalModule):
         ----------
         mctree : I3MCTree
             MC tree
+        track : MMCTrack
+            MMC Track to retrieve entry/exit time
         parent : I3Particle
             Parent particle
         detector : SamplingSurface
@@ -93,9 +96,10 @@ class MuonRemoveChildren(icetray.I3ConditionalModule):
 
         daughters = mctree.get_daughters(parent)
         for daughter in daughters:
-            intersections = detector.intersection(daughter.pos, parent.dir)
+            #intersections = detector.intersection(daughter.pos, parent.dir)
 
-            if intersections.first * intersections.second > 0.:
+            #if intersections.first * intersections.second > 0.:
+            if daughter.time < track.ti or daughter.time > track.tf:
                 cleanedtree.erase(daughter)
 
         return cleanedtree
