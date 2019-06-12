@@ -129,9 +129,11 @@ def main(cfg, run_number, scratch):
 
 
     detectorsurface = MuonGun.Cylinder(
-        length=1600.*I3Units.m,
-        radius=800.*I3Units.m,
-        center=dataclasses.I3Position(0.*I3Units.m, 0.*I3Units.m,, 0.*I3Units.m,))
+        length=1600.*icetray.I3Units.m,
+        radius=800.*icetray.I3Units.m,
+        center=dataclasses.I3Position(0.*icetray.I3Units.m,
+                                      0.*icetray.I3Units.m,
+                                      0.*icetray.I3Units.m,))
 
     # filter secondaries that are not in detector volume
     tray.AddModule(MuonRemoveChildren, 'MuonRemoveChildren',
