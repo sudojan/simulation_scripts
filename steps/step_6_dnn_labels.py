@@ -1,6 +1,6 @@
 #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
 #METAPROJECT /data/user/jsoedingrekso/ic_software/combo_173346/build
-# #METAPROJECT /data/user/mhuennefeld/software/icecube/py2-v3.0.1/combo_trunk/build
+
 import os
 
 import click
@@ -10,10 +10,96 @@ from utils import get_run_folder
 
 from I3Tray import I3Tray
 from icecube import icetray, dataio, dataclasses, hdfwriter, phys_services
-
+from icecube import MuonGun
 from ic3_labels.labels import modules
-# from utils.mask_pulses import get_valid_pulse_map
-# from icecube.DNN_reco.deep_learning_reco import DeepLearningReco
+
+
+# this module is a copy from kkrings
+# ---Tray module---------------------------------------------------------------
+class MuonRemoveChildren(icetray.I3ConditionalModule):
+    r"""Remove children from MC tree.
+
+    This tray module removes the children that are outside of the given
+    detector volume of all muon tracks that are saved in
+    the ``MMCTrackList`` from the ``I3MCTree``.
+
+    """
+    @property
+    def detector(self):
+        r"""SamplingSurface: Detector volume"""
+        return self._detector
+
+    @property
+    def output(self):
+        r"""str: Name for cleaned MC tree"""
+        return self._output
+
+    def __init__(self, context):
+        super(type(self), self).__init__(context)
+
+        self._detector = None
+        self.AddParameter(
+            "Detector",
+            type(self).detector.__doc__,
+            self._detector)
+
+        self._output = "I3MCTree_cleaned"
+        self.AddParameter(
+            "Output",
+            type(self).output.__doc__,
+            self._output)
+
+        self.AddOutBox("OutBox")
+
+    def Configure(self):
+        self._detector = self.GetParameter("Detector")
+        self._output = self.GetParameter("Output")
+
+    def DAQ(self, frame):
+        mctree = frame["I3MCTree"]
+        tracks = frame["MMCTrackList"]
+
+        for track in tracks:
+            parent = mctree.get_particle(track.particle)
+            mctree = self.remove(mctree, parent, self._detector)
+
+        frame[self._output] = mctree
+
+        self.PushFrame(frame)
+
+    @staticmethod
+    def remove(mctree, parent, detector):
+        r"""Remove children from MC tree.
+
+        Remove the children of the given parent particle from the given
+        MC tree that are outside of the given detector volume.
+
+        Parameters
+        ----------
+        mctree : I3MCTree
+            MC tree
+        parent : I3Particle
+            Parent particle
+        detector : SamplingSurface
+            Detector volume
+
+        Returns
+        -------
+        I3MCTree
+            Cleaned MC tree
+
+        """
+        cleanedtree = dataclasses.I3MCTree(mctree)
+
+        daughters = mctree.get_daughters(parent)
+        for daughter in daughters:
+            intersections = detector.intersection(daughter.pos, parent.dir)
+
+            if intersections.first * intersections.second > 0.:
+                cleanedtree.erase(daughter)
+
+        return cleanedtree
+
 
 @click.command()
 @click.argument('cfg', type=click.Path(exists=True))
@@ -41,6 +127,18 @@ def main(cfg, run_number, scratch):
                    'i3 reader',
                    FilenameList=[cfg['gcd'], infile])
 
+
+    detectorsurface = MuonGun.Cylinder(
+        length=1600.*I3Units.m,
+        radius=800.*I3Units.m,
+        center=dataclasses.I3Position(0.*I3Units.m, 0.*I3Units.m,, 0.*I3Units.m,))
+
+    # filter secondaries that are not in detector volume
+    tray.AddModule(MuonRemoveChildren, 'MuonRemoveChildren',
+                   Detector=detectorsurface,
+                   Output='I3MCTree')
+
+
     #--------------------------------------------------
     # Add MC Labels mirco trained his DNN on
     #--------------------------------------------------
@@ -57,29 +155,6 @@ def main(cfg, run_number, scratch):
                        MCPESeriesMapName=cfg['mcpe_series_map'],
                        OutputKey='LabelsDeepLearning',
                        IsMuonGun=True)
-
-
-    # #--------------------------------------------------
-    # # Mask Pulses
-    # #--------------------------------------------------
-    # tray.AddModule(get_valid_pulse_map,'get_valid_pulse_map',
-    #                pulse_key=cfg['DNN_pulse_key'],
-    #                excluded_doms=cfg['DNN_excluded_doms'],
-    #                partial_exclusion=cfg['DNN_partial_exclusion'],
-    #                verbose=True,
-    #                If = lambda f: cfg['DNN_pulse_key'] in f )
-
-    # #--------------------------------------------------
-    # # Apply DNN_reco
-    # #--------------------------------------------------
-    # tray.AddModule(DeepLearningReco,'DeepLearningReco',
-    #                 PulseMapString=cfg['DNN_pulse_key'] + '_masked',
-    #                 OutputBaseName=cfg['DNN_output_base_name'],
-    #                 DNNModel=cfg['DNN_model'],
-    #                 DNNModelDirectory=cfg['DNN_model_directory'],
-    #                 MeasureTime=cfg['DNN_measure_time'],
-    #                 ParallelismThreads=cfg['resources']['cpus'],
-    #                 )
 
 
     tray.AddModule("I3Writer", "EventWriter",
