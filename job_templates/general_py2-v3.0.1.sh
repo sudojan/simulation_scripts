@@ -41,6 +41,8 @@ echo 'Using PYTHONUSERBASE: '${PYTHONUSERBASE}
 export PATH=$PYTHONUSERBASE/bin:$PATH
 export PYTHONPATH=$PYTHONUSERBASE/lib/python2.7/site-packages:$PYTHONPATH
 
+# preventing _tkinter Error in matplotlib
+export MPLBACKEND=agg
 
 echo $FINAL_OUT
 if [ -z ${PBS_JOBID} ] && [ -z ${_CONDOR_SCRATCH_DIR} ]

@@ -10,7 +10,6 @@ from utils import get_run_folder
 from I3Tray import I3Tray
 from icecube import icetray, dataio, dataclasses, hdfwriter, phys_services
 
-from ic3_labels.labels import modules
 from icecube.DNN_reco.deep_learning_reco import DeepLearningReco
 
 
