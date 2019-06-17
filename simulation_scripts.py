@@ -171,8 +171,7 @@ def main(data_folder,
     config_file = click.format_filename(config_file)
     with open(config_file, 'r') as stream:
         custom_settings = SafeDict(yaml.load(stream, Loader=yaml.Loader))
-    chain_name = custom_settings['chain_name']
-    click.echo('Initialized {} chain!'.format(chain_name))
+    click.echo('Initialized processing chain!')
     custom_settings.update({
         'step': step,
         'step_name': get_attribute_from_step(custom_settings,

@@ -1,6 +1,6 @@
 
 # Number of the dataset
-dataset_number: 1904
+dataset_number: 1905
 # Events generated for each file
 n_events_per_run: 1000
 # Number of total runs/file
@@ -147,7 +147,7 @@ extend_past_hull: 0.
 
 # MuonPropagation specific options
 muon_propagation_config : {
-    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
+    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim_brems_1.1.json
 }
 
 # use smarter DOM oversize options?
