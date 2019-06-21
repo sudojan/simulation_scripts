@@ -12,6 +12,9 @@ $ simulation_scripts_write -s "step" "path_to_config_yaml"
 ```
 check --help for options.
 
+The steps till 5 are the default IceCube processing for muons.
+The further steps are analysis specific, here adding Deep Learning attributes.
+
 ### Example
 ```
 simulation_scripts_write -s 0 ~/simulation_scripts/configs/11300.yaml 
@@ -90,3 +93,13 @@ So ( after fixing the bug ;) just type
 python simulation_scripts.py configs/muongun_singlemuons.yaml -s 0 -d /data/user/jsoedingrekso/muongun_crosssections/ -p /scratch/jsoedingrekso/muongun_crosssections_resume --dagman --resume
 ```
 the processing folder should be different to the previous processed one.
+
+#### additional steps, not IceCube default
+
+Every step after 5 is analysis specific.
+For these steps install the python package `ic3-labels`
+```
+git clone https://github.com/mhuen/ic3-labels.git
+cd ic3-labels
+pip install --prefix=${HOME}/software/python_libs -e .
+```
