@@ -52,7 +52,10 @@ def update_config_from_input_dir(cfg, input_dir):
     base_file_name = os.path.basename(filename)
     dirname = os.path.dirname(filename)
 
-    # split again for dataset number and run number
+    # in each i3 file name is structured like:
+    # 'LevelX_[...].DATASETNUMBER.RUNNUMBER.[...].i3.bz2'
+
+    # split name for '.' to extract dataset number and replace run number
     split_base_name = base_file_name.split('.')
     numbers_list = [stmp for stmp in split_base_name if stmp.isdigit() and len(stmp) == 6]
     if len(numbers_list) != 2:
@@ -60,7 +63,6 @@ def update_config_from_input_dir(cfg, input_dir):
     dataset_number = int(numbers_list[0])
     # run_number = int(numbers_list[1])
     idx_list = [split_base_name.index(tmp_num) for tmp_num in numbers_list]
-    # split_base_name[idx_list[0]] = '{dataset_number:6d}'
     split_base_name[idx_list[1]] = '{run_number}'
     base_file_name = '.'.join(split_base_name).replace(' ', '0')
 
@@ -100,10 +102,7 @@ def update_config_from_input_dir(cfg, input_dir):
         # 'run_folder': run_folder,
         })
 
-    # cfg['output_folder'] = STEP_FOLDER.format(**config)
-    # cfg['dataset_folder'] = DATASET_FOLDER.format(**config)
     cfg['output_pattern'] = os.path.join('{run_folder}', base_file_name)
-    # config['outfile_pattern'] = os.path.join(cfg['output_folder'], cfg['output_pattern'])
 
     step_level_name = cfg['step_level_name']
     cfg['step_level_name'] = previous_step_level_name
@@ -175,8 +174,6 @@ def write_job_files(config, step, check_existing=False,
         config['run_folder'] = get_run_folder(i)
         final_out = config['outfile_pattern'].format(**config)
         final_out = final_out.replace(' ', '0')
-        # change the following line if you want resume
-        #final_out = final_out.replace('Level0.{}'.format(config['step']), 'Level3')
         config['final_out'] = final_out
         if check_existing:
             if os.path.isfile(config['final_out']):

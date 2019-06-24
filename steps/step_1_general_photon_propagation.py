@@ -75,35 +75,35 @@ def process_single_stream(cfg, infile, outfile):
         MMCTrackListName=None
     #use_gpus=False
     #use_cpus=True
-    #tray.AddSegment(
-    #    segments.PropagatePhotons,
-    #    "PropagatePhotons",
-    #    GCDFile=cfg['gcd'],
-    #    RandomService=random_service,
-    #    KeepIndividualMaps=cfg['clsim_keep_mcpe'],
-    #    IceModel=cfg['icemodel'],
-    #    IceModelLocation=cfg['icemodel_location'],
-    #    UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
-    #    IgnoreMuons=ignore_muon_light,
-    #    HybridMode=hybrid_mode,
-    #    UseGPUs=use_gpus,
-    #    UseAllCPUCores=use_cpus,
-    #    DOMOversizeFactor=cfg['clsim_dom_oversize'],
-    #    CascadeService=cascade_tables,
-    #    **additional_clsim_params)
+    tray.AddSegment(
+       segments.PropagatePhotons,
+       "PropagatePhotons",
+       GCDFile=cfg['gcd'],
+       RandomService=random_service,
+       KeepIndividualMaps=cfg['clsim_keep_mcpe'],
+       IceModel=cfg['icemodel'],
+       IceModelLocation=cfg['icemodel_location'],
+       UnshadowedFraction=cfg['clsim_unshadowed_fraction'],
+       IgnoreMuons=ignore_muon_light,
+       HybridMode=hybrid_mode,
+       UseGPUs=use_gpus,
+       UseAllCPUCores=use_cpus,
+       DOMOversizeFactor=cfg['clsim_dom_oversize'],
+       CascadeService=cascade_tables,
+       **additional_clsim_params)
 
-    tray.AddSegment(clsim.I3CLSimMakeHits, "makeCLSimHits",
-        GCDFile = cfg['gcd'],
-        PhotonSeriesName = cfg['photonSeriesName'],
-        MCTreeName = MCTreeName,
-        MMCTrackListName = MMCTrackListName,
-        RandomService = random_service,
-        MCPESeriesName = cfg['mcpe_series_map'],
-        UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
-        UseGPUs = use_gpus,
-        UseCPUs = use_cpus,
-        IceModelLocation = os.path.expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
-        )
+    # tray.AddSegment(clsim.I3CLSimMakeHits, "makeCLSimHits",
+    #     GCDFile = cfg['gcd'],
+    #     PhotonSeriesName = cfg['photonSeriesName'],
+    #     MCTreeName = MCTreeName,
+    #     MMCTrackListName = MMCTrackListName,
+    #     RandomService = random_service,
+    #     MCPESeriesName = cfg['mcpe_series_map'],
+    #     UnshadowedFraction = cfg['clsim_unshadowed_fraction'],
+    #     UseGPUs = use_gpus,
+    #     UseCPUs = use_cpus,
+    #     IceModelLocation = os.path.expandvars("$I3_BUILD/ice-models/resources/models/spice_lea"),
+    #     )
 
 
     outfile = outfile.replace(' ', '0')
