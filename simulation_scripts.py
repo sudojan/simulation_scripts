@@ -102,7 +102,7 @@ def update_config_from_input_dir(cfg, input_dir):
 
     # cfg['output_folder'] = STEP_FOLDER.format(**config)
     # cfg['dataset_folder'] = DATASET_FOLDER.format(**config)
-    cfg['output_pattern'] = os.path.join('{run_folder}', base_file_name)
+    cfg['output_pattern'] = str(os.path.join('{run_folder}', base_file_name))
     # config['outfile_pattern'] = os.path.join(cfg['output_folder'], cfg['output_pattern'])
 
     step_level_name = cfg['step_level_name']
@@ -111,7 +111,7 @@ def update_config_from_input_dir(cfg, input_dir):
     cfg['step_level_name'] = step_level_name
 
     cfg.update({
-        'infile_pattern': full_input_file,
+        'infile_pattern': str(full_input_file),
         })
 
     return cfg
