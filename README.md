@@ -81,7 +81,7 @@ cp dagman.options dagman.options_test
 vim dagman.options_test
 10jdG:wq
 vim start_dagman.sh
-A_test:wq
+A_test[Esc]:wq
 ./start_dagman.sh
 ```
 
@@ -96,6 +96,7 @@ the processing folder should be different to the previous processed one.
 
 #### additional steps, not IceCube default
 
+##### DNN reco
 Every step after 5 is analysis specific.
 For these steps install the python package `ic3-labels`
 ```
@@ -103,3 +104,13 @@ git clone https://github.com/mhuen/ic3-labels.git
 cd ic3-labels
 pip install --prefix=${HOME}/software/python_libs -e .
 ```
+
+##### Aachen BDT cut
+In case one wants to apply the BDT cut of the Aachen diffuse numu sample,
+one needs to checkout their project to the combo src and build combo again,
+if it wasn't installed in combo before
+```
+cd $I3_SRC
+svn co http://code.icecube.wisc.edu/svn/projects/finallevel_filter_diffusenumu/trunk/ finallevel_filter_diffusenumu
+```
+and build again.

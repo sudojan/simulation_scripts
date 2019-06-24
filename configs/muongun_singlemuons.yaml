@@ -21,6 +21,7 @@ step_to_level_map:
   5: 'Level3'
   6: 'Level3.1'
   7: 'Level3.2'
+  8: 'Level4'
 
 job_template_map:
   default: general_py2-v3.1.1.sh
@@ -36,6 +37,7 @@ step_name_map:
   5: step_5_pass2_muon_L3
   6: step_6_dnn_labels
   7: step_7_dnn_reco
+  8: diffuse_numu_cut
 
 # sub-dict to indicate need resources
 resources:
@@ -233,4 +235,11 @@ DNN_output_base_name: 'DeepLearning'
 DNN_model: general_tukey
 DNN_model_directory: /data/user/mhuennefeld/DNN_reco/models
 DNN_measure_time: True
+
+
+#--------------------------------------------
+# Settings for BDT cut of Aachen diffuse NuMu Sample
+#--------------------------------------------
+aachen_diffuse_numu_isNuMu: False
+
 
