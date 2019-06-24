@@ -102,7 +102,7 @@ def update_config_from_input_dir(cfg, input_dir):
         # 'run_folder': run_folder,
         })
 
-    cfg['output_pattern'] = os.path.join('{run_folder}', base_file_name)
+    cfg['output_pattern'] = str(os.path.join('{run_folder}', base_file_name))
 
     step_level_name = cfg['step_level_name']
     cfg['step_level_name'] = previous_step_level_name
@@ -110,7 +110,7 @@ def update_config_from_input_dir(cfg, input_dir):
     cfg['step_level_name'] = step_level_name
 
     cfg.update({
-        'infile_pattern': full_input_file,
+        'infile_pattern': str(full_input_file),
         })
 
     return cfg
