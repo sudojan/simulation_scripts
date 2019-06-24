@@ -42,7 +42,7 @@ def update_config_from_input_dir(cfg, input_dir):
         raise NameError('input folder {} is not a directory'.format(input_dir))
     if input_dir.endswith('/'):
         input_dir = input_dir[:-1]
-    config['input_folder'] = input_dir
+    cfg['input_folder'] = input_dir
 
     file_list = glob(os.path.join(input_dir, '*.i3.bz2'))
     nfiles = len(file_list)
@@ -51,19 +51,6 @@ def update_config_from_input_dir(cfg, input_dir):
     filename = file_list[0]
     base_file_name = os.path.basename(filename)
     dirname = os.path.dirname(filename)
-
-    #split base name to change the Level
-    split_base_name = base_file_name.split('_')
-    for idx, split_name in enumerate(split_base_name):
-        if split_name.startswith('Level'):
-            previous_step_level_name = split_base_name[idx]
-            split_base_name[idx] = '{step_level_name}'
-            break
-        else:
-            if idx == len(split_base_name)-1:
-                #reached end of file, no processing level in name
-                split_base_name = ['{step_level_name}'] + split_base_name
-    base_file_name = '_'.join(split_base_name)
 
     # split again for dataset number and run number
     split_base_name = base_file_name.split('.')
@@ -84,6 +71,19 @@ def update_config_from_input_dir(cfg, input_dir):
         split_base_name = base_name.split('.')
         run_numbers.append(int(split_base_name[idx_list[1]]))
 
+    #split base name to change the Level
+    split_base_name = base_file_name.split('_')
+    for idx, split_name in enumerate(split_base_name):
+        if split_name.startswith('Level'):
+            previous_step_level_name = split_base_name[idx]
+            split_base_name[idx] = '{step_level_name}'
+            break
+        else:
+            if idx == len(split_base_name)-1:
+                #reached end of file, no processing level in name
+                split_base_name = ['{step_level_name}'] + split_base_name
+    base_file_name = '_'.join(split_base_name)
+
     # # extract run folder
     # split_dir_name = dirname.split(os.sep)
     # for dir_folder in split_dir_name[::-1]:
@@ -102,7 +102,7 @@ def update_config_from_input_dir(cfg, input_dir):
 
     # cfg['output_folder'] = STEP_FOLDER.format(**config)
     # cfg['dataset_folder'] = DATASET_FOLDER.format(**config)
-    cfg['output_pattern'] = os.path.join('{run_folder}', base_file_name.format(**cfg))
+    cfg['output_pattern'] = os.path.join('{run_folder}', base_file_name)
     # config['outfile_pattern'] = os.path.join(cfg['output_folder'], cfg['output_pattern'])
 
     step_level_name = cfg['step_level_name']
