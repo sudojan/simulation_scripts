@@ -108,9 +108,13 @@ pip install --prefix=${HOME}/software/python_libs -e .
 ##### Aachen BDT cut
 In case one wants to apply the BDT cut of the Aachen diffuse numu sample,
 one needs to checkout their project to the combo src and build combo again,
-if it wasn't installed in combo before
+if it wasn't installed in combo before:
 ```
 cd $I3_SRC
 svn co http://code.icecube.wisc.edu/svn/projects/finallevel_filter_diffusenumu/trunk/ finallevel_filter_diffusenumu
 ```
-and build again.
+One also needs to install scikit-learn version 0.15 (with other version one gets problems to pickle things).
+```
+pip install --prefix=$HOME/software/python2libs scikit-learn==0.15
+```
+

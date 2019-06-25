@@ -37,7 +37,7 @@ step_name_map:
   5: step_5_pass2_muon_L3
   6: step_6_dnn_labels
   7: step_7_dnn_reco
-  8: diffuse_numu_cut
+  8: step_8_diffuse_numu_cut
 
 # sub-dict to indicate need resources
 resources:
