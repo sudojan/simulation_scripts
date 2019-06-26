@@ -94,6 +94,12 @@ python simulation_scripts.py configs/muongun_singlemuons.yaml -s 0 -d /data/user
 ```
 the processing folder should be different to the previous processed one.
 
+#### processing using different input as the previous step
+
+Sometimes one wants to process files from somewhere else (eg other simulation set) and use them as input.
+Or one wants to do different detector simulations and use the already existing photon propagation files.
+Then one can use the input option. It process every i3 file in the given directory.
+
 #### additional steps, not IceCube default
 
 ##### DNN reco
