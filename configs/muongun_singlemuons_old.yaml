@@ -26,6 +26,7 @@ step_to_level_map:
 job_template_map:
   default: general_py2-v3.1.1.sh
   0: general_py2-v3.0.1.sh
+  1: general_py2-v3.0.1.sh
   7: general_py2-v3.0.1.sh
 
 step_name_map:
@@ -58,6 +59,7 @@ resources:
   walltime:
   # Indication of the number of cores for each step, default is 1
   cpus:
+    1: 1
     7: 1
 
 
@@ -172,7 +174,7 @@ icemodel_location:
 
 # CLSIM specific options
 # Ratio of the dom not shadowed by calbes other anything else
-clsim_unshadowed_fraction: 0.95
+clsim_unshadowed_fraction: 1.0
 # whether direct light of muons should be ignored
 clsim_ignore_muon_light: False
 # Run CLSIM using GPUS
@@ -189,7 +191,7 @@ photonSeriesName: !!null
 # using the sliced Muon Track for clsim
 clsim_input_is_sliced: False
 # name should be the same in detector simulation
-mcpe_series_map: MCPESeriesMap
+mcpe_series_map: I3MCPESeriesMap
 
 
 # Detector Simulation
