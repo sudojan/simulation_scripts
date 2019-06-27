@@ -30,7 +30,7 @@ job_template_map:
 
 step_name_map:
   default: 'step_{step}'
-  0: step_0_general_muongun_v06_01_01
+  0: step_0_muongun_v06_01_01
   1: step_1_general_photon_propagation
   2: step_2_pass2_detector_simulation
   3: step_3_pass2_L1
@@ -152,7 +152,7 @@ extend_past_hull: 0.
 
 # MuonPropagation specific options
 muon_propagation_config : {
-    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
+#    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
 }
 
 # use smarter DOM oversize options?
