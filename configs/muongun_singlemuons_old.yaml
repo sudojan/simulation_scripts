@@ -27,13 +27,14 @@ job_template_map:
   default: general_py2-v3.1.1.sh
   0: general_py2-v3.0.1.sh
   1: general_py2-v3.0.1.sh
+  2: general_py2-v3.0.1.sh
   7: general_py2-v3.0.1.sh
 
 step_name_map:
   default: 'step_{step}'
   0: step_0_muongun_v06_01_01
   1: step_1_photon_propagation_v06_01_01
-  2: step_2_pass2_detector_simulation
+  2: step_2_detector_simulation_v06_01_01
   3: step_3_pass2_L1
   4: step_4_pass2_L2
   5: step_5_pass2_muon_L3
