@@ -32,7 +32,7 @@ job_template_map:
 step_name_map:
   default: 'step_{step}'
   0: step_0_muongun_v06_01_01
-  1: step_1_general_photon_propagation
+  1: step_1_photon_propagation_v06_01_01
   2: step_2_pass2_detector_simulation
   3: step_3_pass2_L1
   4: step_4_pass2_L2
