@@ -51,8 +51,8 @@ resources:
   # Indication of needed memory for each step if nothing is set 1GB is assumed as default
   memory:
     1: 5gb
-    2: 3gb
-    3: 3gb
+    2: 5gb
+    3: 5gb
     4: 3gb
     5: 3gb
     8: 3gb
@@ -71,8 +71,8 @@ seed: 1337
 keep_crashed_files: False
 
 # PATH to the GCD File
-# gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
-gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
+gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
+# gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
 
 # ----------------------------------- #
 #    path to photon tables tables     #
