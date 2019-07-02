@@ -53,8 +53,8 @@ resources:
     1: 5gb
     2: 5gb
     3: 5gb
-    4: 3gb
-    5: 3gb
+    4: 5gb
+    5: 5gb
     8: 3gb
   # Indication of the walltime (in hours) for each step, if nothing is set the system default for dagman and 1h for pbs are assumed
   walltime:
