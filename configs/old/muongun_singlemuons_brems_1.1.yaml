@@ -1,14 +1,12 @@
 
 # Number of the dataset
-dataset_number: 1804
+dataset_number: 1905
 # Events generated for each file
 n_events_per_run: 1000
 # Number of total runs/file
 n_runs: 100
 
 # Pattern for the outputfile
-# output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
-# the step_to_level_map will replace the 'Level0.{step}' in the future
 output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
 # sub-dict to map step to processing level state
 step_to_level_map:
@@ -21,23 +19,21 @@ step_to_level_map:
   5: 'Level3'
   6: 'Level3.1'
   7: 'Level3.2'
-  8: 'Level4'
 
 job_template_map:
-  default: general_py2-v3.0.1.sh
-  5: general_py2-v3.1.1.sh
+  default: general_py2-v3.1.1.sh
+  7: general_py2-v3.0.1.sh
 
 step_name_map:
   default: 'step_{step}'
-  0: step_0_muongun_v06_01_01
-  1: step_1_photon_propagation_v06_01_01
-  2: step_2_detector_simulation_v06_01_01
-  3: step_3_pass2_L1_v05_02_03
-  4: step_4_pass2_L2_v05_02_03
-  5: step_5_pass2_muon_L3_v05_02_03
+  0: step_0_muongun
+  1: step_1_photon_propagation
+  2: step_2_detector_simulation
+  3: step_3_L1_online_filter
+  4: step_4_L2_offline_filter
+  5: step_5_L3_muon_reconstruction
   6: step_6_dnn_labels
   7: step_7_dnn_reco
-  8: step_8_diffuse_numu_cut
 
 # sub-dict to indicate need resources
 resources:
@@ -47,17 +43,15 @@ resources:
     7: 1
   # Indication of needed memory for each step if nothing is set 1GB is assumed as default
   memory:
-    1: 5gb
-    2: 5gb
-    3: 5gb
-    4: 5gb
-    5: 5gb
-    8: 3gb
+    1: 3gb
+    2: 3gb
+    3: 3gb
+    4: 3gb
+    5: 3gb
   # Indication of the walltime (in hours) for each step, if nothing is set the system default for dagman and 1h for pbs are assumed
   walltime:
   # Indication of the number of cores for each step, default is 1
   cpus:
-    1: 1
     7: 1
 
 
@@ -68,8 +62,8 @@ seed: 1337
 keep_crashed_files: False
 
 # PATH to the GCD File
-gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
-# gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
+# gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86_Merged.i3.gz
+gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
 
 # ----------------------------------- #
 #    path to photon tables tables     #
@@ -80,15 +74,15 @@ photon_tables_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables
 spline_table_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines
 # SPICE Mie infinite muons produced using PPC
 # amplitude
-mu_amplitude_spline_table: InfBareMu_mie_abs_z20a10.fits
+mu_amplitude_spline_table: InfBareMu_mie_abs_z20a10_V2.fits
 # time
-mu_timing_spline_table: InfBareMu_mie_prob_z20a10.fits
+mu_timing_spline_table: InfBareMu_mie_prob_z20a10_V2.fits
 # SPICE-Mie pointlike shower tables produced using
 # Photonics (ems_mie_*.fits) or clsim tablemaker (cascades_clsim_mie_*.fits)
 # amplitude: (*.abs.fits)
-cascade_amplitude_spline_table: ems_mie_z20_a10.abs.fits
+cascade_amplitude_spline_table: cascades_clsim_mie_z20_a10.abs.fits
 # time: (*.prob.fits)
-cascade_timing_spline_table: ems_mie_z20_a10.prob.fits
+cascade_timing_spline_table: cascades_clsim_mie_z20_a10.prob.fits
 
 
 
@@ -152,7 +146,7 @@ extend_past_hull: 0.
 
 # MuonPropagation specific options
 muon_propagation_config : {
-#    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
+    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/PROPOSAL_configs/old/config_icesim_brems_1.1.json
 }
 
 # use smarter DOM oversize options?
@@ -172,7 +166,7 @@ icemodel_location:
 
 # CLSIM specific options
 # Ratio of the dom not shadowed by calbes other anything else
-clsim_unshadowed_fraction: 1.0
+clsim_unshadowed_fraction: 0.95
 # whether direct light of muons should be ignored
 clsim_ignore_muon_light: False
 # Run CLSIM using GPUS
@@ -189,7 +183,7 @@ photonSeriesName: !!null
 # using the sliced Muon Track for clsim
 clsim_input_is_sliced: False
 # name should be the same in detector simulation
-mcpe_series_map: I3MCPESeriesMap
+mcpe_series_map: MCPESeriesMap
 
 
 # Detector Simulation
@@ -237,11 +231,4 @@ DNN_output_base_name: 'DeepLearning'
 DNN_model: general_tukey
 DNN_model_directory: /data/user/mhuennefeld/DNN_reco/models
 DNN_measure_time: True
-
-
-#--------------------------------------------
-# Settings for BDT cut of Aachen diffuse NuMu Sample
-#--------------------------------------------
-aachen_diffuse_numu_isNuMu: False
-
 

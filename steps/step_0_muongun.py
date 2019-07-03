@@ -338,7 +338,6 @@ def main(cfg, run_number, scratch):
         "PropagateMuons",
         RandomService=random_service_prop,
         **cfg['muon_propagation_config'])
-        # PROPOSAL_config_file=cfg['muon_propagation_config']['PROPOSAL_config_file'])
 
 
     # --------------------------------------

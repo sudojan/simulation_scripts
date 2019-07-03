@@ -115,7 +115,7 @@ def process_single_stream(cfg, infile, outfile):
                             icetray.I3Frame.Stream('M')])
 
     tray.Execute()
-    tray.Finish()
+    del tray
 
 
 process_single_stream.n_streams = 1
@@ -148,7 +148,7 @@ def merge(infiles, outfile):
                             icetray.I3Frame.Stream('M')])
 
     tray.Execute()
-    tray.Finish()
+    del tray
     for file_i in infiles:
         click.echo('Remvoing {}:'.format(file_i))
         os.remove(file_i)

@@ -1,14 +1,12 @@
 
 # Number of the dataset
-dataset_number: 1904
+dataset_number: 1903
 # Events generated for each file
 n_events_per_run: 1000
 # Number of total runs/file
 n_runs: 100
 
 # Pattern for the outputfile
-# output_pattern: '{run_folder}/Level0.{step}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
-# the step_to_level_map will replace the 'Level0.{step}' in the future
 output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.pass2.{dataset_number:6d}.{run_number}.i3.bz2'
 # sub-dict to map step to processing level state
 step_to_level_map:
@@ -21,7 +19,6 @@ step_to_level_map:
   5: 'Level3'
   6: 'Level3.1'
   7: 'Level3.2'
-  8: 'Level4'
 
 job_template_map:
   default: general_py2-v3.1.1.sh
@@ -29,15 +26,14 @@ job_template_map:
 
 step_name_map:
   default: 'step_{step}'
-  0: step_0_general_muongun
-  1: step_1_general_photon_propagation
-  2: step_2_pass2_detector_simulation
-  3: step_3_pass2_L1
-  4: step_4_pass2_L2
-  5: step_5_pass2_muon_L3
+  0: step_0_muongun
+  1: step_1_photon_propagation
+  2: step_2_detector_simulation
+  3: step_3_L1_online_filter
+  4: step_4_L2_offline_filter
+  5: step_5_L3_muon_reconstruction
   6: step_6_dnn_labels
   7: step_7_dnn_reco
-  8: step_8_diffuse_numu_cut
 
 # sub-dict to indicate need resources
 resources:
@@ -52,7 +48,6 @@ resources:
     3: 3gb
     4: 3gb
     5: 3gb
-    8: 3gb
   # Indication of the walltime (in hours) for each step, if nothing is set the system default for dagman and 1h for pbs are assumed
   walltime:
   # Indication of the number of cores for each step, default is 1
@@ -151,7 +146,7 @@ extend_past_hull: 0.
 
 # MuonPropagation specific options
 muon_propagation_config : {
-    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/config_icesim.json
+    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/PROPOSAL_configs/old/config_icesim_brems_0.9.json
 }
 
 # use smarter DOM oversize options?
@@ -236,11 +231,4 @@ DNN_output_base_name: 'DeepLearning'
 DNN_model: general_tukey
 DNN_model_directory: /data/user/mhuennefeld/DNN_reco/models
 DNN_measure_time: True
-
-
-#--------------------------------------------
-# Settings for BDT cut of Aachen diffuse NuMu Sample
-#--------------------------------------------
-aachen_diffuse_numu_isNuMu: False
-
 
