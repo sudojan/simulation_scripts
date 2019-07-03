@@ -1,5 +1,5 @@
 # simulation_scripts
-
+(this version was used to do test with no scattering, old simulations and reconstructions)
 ## Usage
 
 ```
