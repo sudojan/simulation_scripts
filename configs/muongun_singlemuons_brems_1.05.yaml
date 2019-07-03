@@ -1,0 +1,247 @@
+
+# Number of the dataset
+dataset_number: 1905
+# Events generated for each file
+n_events_per_run: 1000
+# Number of total runs/file
+n_runs: 100
+
+# Pattern for the outputfile
+output_pattern: '{run_folder}/{step_level_name}_muongun_singlemuons_IC86.{dataset_number:6d}.{run_number}.i3.bz2'
+# sub-dict to map step to processing level state
+step_to_level_map:
+  default: 'Level0.{step}'
+  0: 'Level0.0'
+  1: 'Level0.1'
+  2: 'Level0.2'
+  3: 'Level1'
+  4: 'Level2'
+  5: 'Level3'
+  6: 'Level3.1'
+  7: 'Level3.2'
+  8: 'Level4'
+
+job_template_map:
+  default: general_py2-v3.1.1.sh
+  7: general_py2-v3.0.1.sh
+
+step_name_map:
+  default: 'step_{step}'
+  0: step_0_muongun
+  1: step_1_photon_propagation
+  2: step_2_detector_simulation
+  3: step_3_L1_online_filter
+  4: step_4_L2_offline_filter
+  5: step_5_L3_muon_reconstruction
+  6: step_6_dnn_labels
+  7: step_7_dnn_reco
+  8: step_8_diffuse_numu_cut
+
+# sub-dict to indicate need resources
+resources:
+  # Indication which steps need GPUs, default is 0
+  gpus:
+    1: 1
+    7: 1
+  # Indication of needed memory for each step if nothing is set 1GB is assumed as default
+  memory:
+    1: 5gb
+    2: 5gb
+    3: 4gb
+    4: 4gb
+    5: 4gb
+    8: 3gb
+  # Indication of the walltime (in hours) for each step, if nothing is set the system default for dagman and 1h for pbs are assumed
+  walltime:
+  # Indication of the number of cores for each step, default is 1
+  cpus:
+    1: 1
+    7: 1
+
+
+# Options used in the steps
+# Options that are expected to be set to generate the scripts
+seed: 1337
+# Whether file after IceTray should be kept
+keep_crashed_files: False
+
+# PATH to the GCD File
+# older GCD files
+# [...]/GeoCalibDetectorStatus_IC86_Merged.i3.gz
+# [...]/GeoCalibDetectorStatus_IC86.All_Pass2.i3.gz
+gcd: /cvmfs/icecube.opensciencegrid.org/data/GCD/GeoCalibDetectorStatus_IC86.All_Pass3.i3.gz
+
+# ----------------------------------- #
+#    path to photon tables tables     #
+# ----------------------------------- #
+# path to photon tables
+photon_tables_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables
+# path to spline tables
+spline_table_dir: /cvmfs/icecube.opensciencegrid.org/data/photon-tables/splines
+# SPICE Mie infinite muons produced using PPC
+# amplitude
+mu_amplitude_spline_table: InfBareMu_mie_abs_z20a10_V2.fits
+# time
+mu_timing_spline_table: InfBareMu_mie_prob_z20a10_V2.fits
+# SPICE-Mie pointlike shower tables produced using
+# Photonics (ems_mie_*.fits) or clsim tablemaker (cascades_clsim_mie_*.fits)
+# amplitude: (*.abs.fits)
+cascade_amplitude_spline_table: cascades_clsim_mie_z20_a10.abs.fits
+# time: (*.prob.fits)
+cascade_timing_spline_table: cascades_clsim_mie_z20_a10.prob.fits
+
+
+
+# ------------------------------------------- #
+##### for the muon generation/propagation #####
+# ------------------------------------------- #
+
+# Name of the generator; only used for naming of the output folder
+generator: muongun
+# Starting Energy GeV
+e_min: 500
+# Maximal Energy GeV
+e_max: !!float 1e7
+# Used gamme for the generator (E^-gamma)
+gamma: 2.
+# Starting zenith
+zenith_min: 0.
+# End zenith
+zenith_max: 180.
+
+# choose one of the following MuonGenerators
+# MuonGunSinglemuons, MuonGunGeneral, MuonResimulation
+MuonGenerator: MuonGunSinglemuons
+
+# MuonGunSinglemuons and MuonGunGeneral option
+# Energy offset `b` of power-law approximation (E + b)^{-gamma}
+muongun_e_break: !!float 1e4
+
+# muongun general specific options
+muongun_generator: static
+muongun_model: GaisserH4a_atmod12_SIBYLL
+muongun_min_multiplicity: 1
+muongun_max_multiplicity: 1000
+# muongun floodlight specific options
+muongun_floodlight_min_cos: -1.0
+muongun_floodlight_max_cos: 1.0
+
+# resimulation specific options
+# Starting azimuth
+azimuth_min: 0.
+# End azimuth
+azimuth_max: 360.
+# anchor time range in ns [min,max]
+anchor_time_range: [9000,12000]
+# anchor point range in m [min,max]
+anchor_x_range: [-400,400]
+anchor_y_range: [-400,400]
+anchor_z_range: [-400,400]
+# distance [m] to go back along track
+# from the anchor point in order to
+# create the vertex of the muon
+length_to_go_back: 2000
+# Instead create the vertex on the
+# convex hull?
+# If use_convex_hull is True,
+# length_to_go_back is ignored
+use_convex_hull: False
+# Distance to move vertex further past 
+# the convex hull
+extend_past_hull: 0.
+
+# MuonPropagation specific options
+muon_propagation_config : {
+    PROPOSAL_config_file: /data/user/jsoedingrekso/resources/PROPOSAL_configs/config_icesim_noscatter_brems_1.05.json
+}
+
+# use smarter DOM oversize options?
+distance_splits:
+threshold_doms:
+oversize_factors:
+
+
+# ---------------------------------- #
+##### for the photon propagation #####
+# ---------------------------------- #
+
+# Used icemodel ['SpiceLea']
+icemodel: SpiceLea
+# For default location: leave empty
+icemodel_location:
+
+# CLSIM specific options
+# Ratio of the dom not shadowed by calbes other anything else
+clsim_unshadowed_fraction: 1.0
+# whether direct light of muons should be ignored
+clsim_ignore_muon_light: False
+# Run CLSIM using GPUS
+clsim_usegpus: False
+# DOM oversize factor
+clsim_dom_oversize: 5.
+# Whether I3MCPE list should be stored
+clsim_keep_mcpe: False
+# Whether CLsim should run in hybrid mode (needs the spline_table_dir)
+clsim_hybrid_mode: False
+# keep None (which is !!null in yaml language) if you don't want to keep the photon data
+# or they should be kept: 'PropagatedPhotons'
+photonSeriesName: !!null
+# using the sliced Muon Track for clsim
+clsim_input_is_sliced: False
+# name should be the same in detector simulation
+mcpe_series_map: I3MCPESeriesMap
+
+
+# Detector Simulation
+# keep MCPEs in frame
+det_keep_mc_hits: False
+# keep I3MCPulseSeriesMap in frame.
+det_keep_mc_pulses: False
+# keep MCTree with all in-ice propagated secondaries. These take a lot of space compared un propagated tree.
+det_keep_propagated_mc_tree: True
+# Keep everything upto run X
+det_pass2_keep_all_upto: 1000
+# add beacon lauches.
+det_add_beacon_launches: True
+# reduce peak memory use by repeatedly merging hits as they are generated.  WARNING: Use of this option may slightly reduce precision and drastically increase running time. It is potentially useful for very bright events, and probably harmful for very long events.
+det_low_mem: False
+# remove events that don't pass any trigger.
+det_filter_trigger: True
+# do not run Vuvuzela.
+det_skip_noise_generation: False
+
+
+
+# Filtering Settings
+
+# Set the Min Bias prescale to something other than default
+L1_min_bias_prescale: !!null
+# MC is produced by DOMSimulator (default=False)
+L1_2012_dom_simulator: False
+# Apply QConverter, use if file is P frame only
+L1_2012_qify: False
+# Retrigger
+L1_2012_retrigger: False
+# Run GFU -> needs spline tables
+L1_pass2_run_gfu: true
+
+
+
+#------------------------------
+# DNN_reco Settings
+#------------------------------
+DNN_excluded_doms: [] # ['SaturationWindows','BadDomsList','CalibrationErrata','BrightDOMs']
+DNN_partial_exclusion: True
+DNN_pulse_key: InIcePulses
+DNN_output_base_name: 'DeepLearning'
+DNN_model: general_tukey
+DNN_model_directory: /data/user/mhuennefeld/DNN_reco/models
+DNN_measure_time: True
+
+
+#--------------------------------------------
+# Settings for BDT cut of Aachen diffuse NuMu Sample
+#--------------------------------------------
+aachen_diffuse_numu_isNuMu: False
+
+
