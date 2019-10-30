@@ -243,5 +243,7 @@ DNN_measure_time: True
 # Settings for BDT cut of Aachen diffuse NuMu Sample
 #--------------------------------------------
 aachen_diffuse_numu_isNuMu: False
+aachen_diffuse_numu_ClfPath: FULL_MAX_FEATURES_sqrt_MAX_DEPTH_None_MIN_SAMPLES_SPLIT_30000_MIN_SAMPLES_LEAF_15000_N_ESTIMATORS_50_LEARNING_RATE_0.05.pkl
+aachen_diffuse_numu_CascClfPath: FULL_NUE_MAX_FEATURES_sqrt_MAX_DEPTH_None_MIN_SAMPLES_SPLIT_30000_MIN_SAMPLES_LEAF_15000_N_ESTIMATORS_50_LEARNING_RATE_0.05.pkl
 
 

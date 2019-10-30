@@ -58,7 +58,13 @@ def main(cfg, run_number, scratch):
 
     tray.Add(level5.segments.Scorer, "doLevel5",
         CutFunc=level5.segments.CutFunc,
-        CascCut=0.5)
+        CascCut=0.5,
+        ClfPath=os.path.join(os.path.expandvars('$I3_BUILD'),
+                            'finallevel_filter_diffusenumu/resources/bdt',
+                            cfg['aachen_diffuse_numu_ClfPath']),
+        CascClfPath=os.path.join(os.path.expandvars('$I3_BUILD'),
+                                'finallevel_filter_diffusenumu/resources/bdt',
+                                cfg['aachen_diffuse_numu_CascClfPath']))
 
     tray.Add(level5.segments.millipede_segment, "MillipedeLosses", table_paths=paths)
     tray.Add(level5.segments.paraboloid_segment, "Paraboloid", table_paths=paths)
