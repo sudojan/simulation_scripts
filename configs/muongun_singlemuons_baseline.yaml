@@ -20,6 +20,7 @@ step_to_level_map:
   6: 'Level3.1'
   7: 'Level3.2'
   8: 'Level4'
+  9: 'Level9'
 
 job_template_map:
   default: general_py2-v3.1.1.sh
@@ -36,6 +37,7 @@ step_name_map:
   6: step_6_dnn_labels
   7: step_7_dnn_reco
   8: step_8_diffuse_numu_cut
+  9: step_01_muon_propagation
 
 # sub-dict to indicate need resources
 resources:
